@@ -14,7 +14,7 @@ class Application extends Controller {
 		Ok(views.html.index("Hello World!"))
 	}
 
-	def test(username: String) = Action.async {
+	def signin(username: String, password: Option[String]) = Action.async {
 		val futureMaybeUser: Future[Option[User]] = UserRepo.find(username)
 		for(
 			maybeUser <- futureMaybeUser
