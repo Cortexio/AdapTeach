@@ -3,7 +3,11 @@
 # ~~~~
 
 # Home page
-GET     /                           controllers.Application.index
+GET     /                           controllers.Application.index(url="")
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+
+# redirect all to the index template and client side router abyssa handle the routing
+# !!! Must be the last route !!!
+GET     /*url                       controllers.Application.index(url)

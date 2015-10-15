@@ -40,8 +40,3 @@ q:before, q:after {
 table {
   border-collapse: collapse;
   border-spacing: 0; }
-
-body {
-  background-color: #EFEFEF;
-  color: #4e4e4e;
-  height: 100vh; }

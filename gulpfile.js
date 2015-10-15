@@ -12,7 +12,7 @@ var buffer = require('vinyl-buffer')
 
 gulp.task('build-jsx', function () {
   browserify({
-    entries: './app/assets/javascripts/app.js',
+    entries: './app/assets/javascripts/app.jsx',
     extensions: ['.jsx'],
     debug: true
   })
@@ -20,11 +20,11 @@ gulp.task('build-jsx', function () {
   .bundle()
   .pipe(source('bundle.js'))
   .pipe(rename('adapteach.js'))
-  .pipe(gulp.dest('./public/javascripts/'))
-  .pipe(buffer())
-  .pipe(uglify())
-  .pipe(rename('adapteach.min.js'))
   .pipe(gulp.dest('./public/javascripts/'));
+  // .pipe(buffer())
+  // .pipe(uglify())
+  // .pipe(rename('adapteach.min.js'))
+  // .pipe(gulp.dest('./public/javascripts/'));
 });
 
 gulp.task('watch-jsx', function() {
