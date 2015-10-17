@@ -57,13 +57,13 @@ $ git push -u "<your remote branch name>"
 
 Now, you can merge the "exp" branch before submitting a pull request
 
-- fetch data from origin to update your local branches
+- fetch data from origin to update your remote tracking
 ```sh
 $ git fetch origin exp
 ```
-- merge "exp branch"
+- merge branch "origin/exp" into your local branch
 ```sh
-$ git merge exp
+$ git origin/merge exp
 ```
 
 Finally, just go on github and make your pull request from your remote branch to the exp branch.
