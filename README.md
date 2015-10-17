@@ -63,7 +63,7 @@ $ git fetch origin exp
 ```
 - merge branch "origin/exp" into your local branch
 ```sh
-$ git origin/merge exp
+$ git merge origin/exp
 ```
 
 Finally, just go on github and make your pull request from your remote branch to the exp branch.
