@@ -4,6 +4,8 @@ import { State } from 'abyssa'
 
 import router from './router'
 
+import json from './helpers/json'
+
 import home from './views/home'
 import signin from './views/signin'
 import signup from './views/signup'
@@ -16,4 +18,7 @@ router
 
 window.init = function () {
   router.init()
+
+  //init helpers to edit js prototypes
+  json.help()
 }
