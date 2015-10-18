@@ -88,9 +88,9 @@ var form = React.createClass({
     if(self.state.errors.length === 0) {
       let res = {}
       this.state.formData.forEach(function(elem, index) {
-        if(elem.value) res[elem.name] = elem.value
+        if(elem.value) res.tupled(elem.name, elem.value)
       })
-      this.props.submitAction(res)
+      this.props.submitAction({params: res, method: self.props.method})
     }
     else this.setState(this.state)
   },
