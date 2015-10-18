@@ -28,7 +28,7 @@ var signup = React.createClass({
       .tupled(FCST.FIELD.PLACEHOLDER, 'First name')
       .tupled(FCST.FIELD.NAME, 'firstname')
       .tupled(FCST.FIELD.MANDATORY, true)
-      .tupled(FCST.FIELD.STYLE, 'half')
+      .tupled(FCST.FIELD.HALF_SIZE, FCST.FIELD.POSITION.LEFT)
 
     let lastname = {}
       .tupled(FCST.FIELD.ELEMENT, 'input')
@@ -36,7 +36,7 @@ var signup = React.createClass({
       .tupled(FCST.FIELD.PLACEHOLDER, 'Last Name')
       .tupled(FCST.FIELD.NAME, 'lastname')
       .tupled(FCST.FIELD.MANDATORY, true)
-      .tupled(FCST.FIELD.STYLE, 'half')
+      .tupled(FCST.FIELD.HALF_SIZE, FCST.FIELD.POSITION.RIGHT)
 
     let username = {}
       .tupled(FCST.FIELD.ELEMENT, 'input')

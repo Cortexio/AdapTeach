@@ -1,20 +1,24 @@
-import { set, remove } from '../actions/SessionActions';
-import request from 'request';
+import { ActorStore} from 'fluxx'
 
-var action = Action.create('set', 'remove');
+import {authDispatcher} from '../actions/authActions'
 
-var store = Store({
-  session : {}, 
+export default Store(on => {
+  dependOn(otherStore);
 
-  handlers: {
-    [action.set]: function(session) {
-      request('/app/session', function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-          return response
-        }
-      });
-    },
-    [action.remove]: (session) => {}
-  }
+  // The store's private state; The store could have many of these.
+  let session = {}
+
+  // When the store receives the init Action,
+  // initialize its initial state with the action's payload.
+  on(authDispatcher.SET_SESSION, data => {
+    session = data
+  })
+
+  on(authDispatcher.REMOVE_SESSION => {
+    session = {}
+  })
+
+  return {
+    session: () => session
+  };
 });
- export { store, action };

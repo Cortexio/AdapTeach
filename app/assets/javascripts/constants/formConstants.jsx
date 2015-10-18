@@ -9,7 +9,12 @@ export default {
     PLACEHOLDER: "placeholder",
     NAME: "name",
     MANDATORY: "mandatory",
-    STYLE: "style"
+    STYLE: "style",
+    HALF_SIZE: "half",
+    POSITION: {
+      LEFT: "left",
+      RIGHT: "right"
+    }
   },
 
   FIELD_TYPES : {

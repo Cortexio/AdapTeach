@@ -12,11 +12,13 @@ var signin = React.createClass({
   render() {
     return (
       <div className="signin">
-        <Form
-          method="POST"
-          fields={this._signinFields()}
-          submitAction={this._handleSignin}
-          submitValue="Sign in" />
+        <div className="form-wrapper">
+          <Form
+            method="POST"
+            fields={this._signinFields()}
+            submitAction={this._handleSignin}
+            submitValue="Sign in" />
+          </div>
       </div> 
     )
   },
@@ -31,7 +33,7 @@ var signin = React.createClass({
       .tupled(FCST.FIELD.TYPE, 'text')
       .tupled(FCST.FIELD.PLACEHOLDER, 'Username')
       .tupled(FCST.FIELD.NAME, 'username')
-      .tupled(FCST.FIELD.MANDATORY, false)
+      .tupled(FCST.FIELD.MANDATORY, true)
     
     let password = {}
       .tupled(FCST.FIELD.ELEMENT, 'input')

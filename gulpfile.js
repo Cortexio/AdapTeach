@@ -27,13 +27,18 @@ gulp.task('build-jsx', function () {
   // .pipe(gulp.dest('./public/javascripts/'));
 });
 
+gulp.task('copy-virtuoso', function() {
+  gulp.src('index.js')
+    .pipe(gulp.dest('dist'))
+});
+
 gulp.task('watch-jsx', function() {
     gulp.watch(['./app/assets/javascripts//**/*.jsx'], ['build-jsx']);
 });
 
 gulp.task('build-sass', function () {
     gulp.src('./app/assets/stylesheets/**/*.sass')
-    .pipe(sass())
+    .pipe(sass({errLogToConsole: true}))
     .pipe(autoprefixer({
         browsers: ['last 3 versions'],
         cascade: false}))

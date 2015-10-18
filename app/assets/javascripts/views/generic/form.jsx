@@ -10,7 +10,7 @@ function signinInitialState() {
         this.props.fields.map(function(field, index) {
           let obj = {}
           obj[field[FCST.FIELD.NAME]] = 
-            {name: field[FCST.FIELD.NAME], element: field[FCST.FIELD.ELEMENT], mandatory: field[FCST.FIELD.MANDATORY], 
+            {name: field[FCST.FIELD.NAME], element: field[FCST.FIELD.ELEMENT], mandatory: field[FCST.FIELD.MANDATORY], half: field[FCST.FIELD.HALF_SIZE],
               style: field[FCST.FIELD.STYLE], type: field[FCST.FIELD.TYPE], placeholder: field[FCST.FIELD.PLACEHOLDER], value: null}
           return obj
         }).reduce(function(acc, field) {
@@ -51,7 +51,7 @@ var form = React.createClass({
   renderInput(field) {
     return (
       <input key={field.name} type={field.type} 
-        className={field.style}
+        className={field.half ? 'half ' + field.half : '' + field.style || ''}
         placeholder={field.placeholder} name={field.name} 
         onChange={this._handleChange.bind(null, field.name)} />
     )
