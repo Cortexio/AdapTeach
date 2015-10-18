@@ -1,7 +1,6 @@
 import React from 'react'
-import jsonMerge from 'merge'
 
-import FORM_CONSTANTS from '../../constants/formConstants'
+import FCST from '../../constants/formConstants'
 
 function signinInitialState() {
   return (
@@ -10,11 +9,12 @@ function signinInitialState() {
       formData: 
         this.props.fields.map(function(field, index) {
           let obj = {}
-          obj[field[FORM_CONSTANTS.FIELD.NAME]] = 
-            {name: field[FORM_CONSTANTS.FIELD.NAME], mandatory: field[FORM_CONSTANTS.FIELD.MANDATORY], type: field[FORM_CONSTANTS.FIELD.TYPE], value: null}
+          obj[field[FCST.FIELD.NAME]] = 
+            {name: field[FCST.FIELD.NAME], element: field[FCST.FIELD.ELEMENT], mandatory: field[FCST.FIELD.MANDATORY], 
+              style: field[FCST.FIELD.STYLE], type: field[FCST.FIELD.TYPE], placeholder: field[FCST.FIELD.PLACEHOLDER], value: null}
           return obj
         }).reduce(function(acc, field) {
-          return jsonMerge(acc, field)
+          return acc.merge(field)
         })
     }
   )
@@ -33,8 +33,8 @@ var form = React.createClass({
   render() {
     let self = this
     let fields = this.props.fields.map(function(field, index) {
-      switch(field[FORM_CONSTANTS.FIELD.ELEMENT]) {
-        case FORM_CONSTANTS.FIELDS.INPUT : return self.renderInput(field)
+      switch(field.element) {
+        case FCST.FIELDS.INPUT : return self.renderInput(self.state.formData[field[FCST.FIELD.NAME]])
         default : console.log(field)
       }
     })
@@ -50,9 +50,10 @@ var form = React.createClass({
 
   renderInput(field) {
     return (
-      <input key={field[FORM_CONSTANTS.FIELD.NAME]} type={field[FORM_CONSTANTS.FIELD.TYPE]} 
-        placeholder={field[FORM_CONSTANTS.FIELD.PLACEHOLDER]} name={field[FORM_CONSTANTS.FIELD.NAME]} 
-        onChange={this._handleChange.bind(null, field[FORM_CONSTANTS.FIELD.NAME])} />
+      <input key={field.name} type={field.type} 
+        className={field.style}
+        placeholder={field.placeholder} name={field.name} 
+        onChange={this._handleChange.bind(null, field.name)} />
     )
   },
 
@@ -71,18 +72,18 @@ var form = React.createClass({
     this.state.formData.forEach(function(elem, index) {
       if(elem && elem.value != null) {
         switch(elem.type) {
-          case FORM_CONSTANTS.FIELD_TYPES.PASSWORD: 
+          case FCST.FIELD_TYPES.PASSWORD: 
             if(elem.value == null || elem.value.length < 6) self.state.errors.push({field: elem.name, error: "Enter a longer password"})
             break;
 
-          case FORM_CONSTANTS.FIELD_TYPES.EMAIL: 
+          case FCST.FIELD_TYPES.EMAIL: 
             var mailRegex = new RegExp('^.+\\@.+\\..+$')
             if(!elem.value.match(mailRegex)) self.state.errors.push({field: elem.name, error: "Enter a valid email"})
             break;
 
           default: break;
         }
-      } else if(elem.mandatory) self.state.errors.push({field: elem.name, error: "the field " + elem.name + " is mandatory"})
+      } else if(elem.mandatory) self.state.errors.push({field: elem.name, error: "the field " + elem.placeholder + " is mandatory"})
     })
     if(self.state.errors.length === 0) {
       let res = {}

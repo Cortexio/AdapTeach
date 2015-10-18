@@ -16,9 +16,7 @@ router
   .addState('signin', State('signin', signin))
   .addState('signup', State('signup', signup))
 
+
 window.init = function () {
   router.init()
-
-  //init helpers to edit js prototypes
-  json.help()
 }

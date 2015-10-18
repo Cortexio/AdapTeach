@@ -1,39 +1,44 @@
 import React from 'react'
+import json from '../../helpers/json'
+
 import Form from '../generic/form'
-import FORM_CONSTANTS from '../../constants/formConstants'
+import FCST from '../../constants/formConstants'
 
 var signin = React.createClass({
+  componentWillMount() {
+    json.help()
+  },
 
   render() {
     return (
       <div className="signin">
         <Form
           method="POST"
-          fields={this.signinFields()}
-          submitAction={this.handleSignin}
+          fields={this._signinFields()}
+          submitAction={this._handleSignin}
           submitValue="Sign in" />
       </div> 
     )
   },
 
-  handleSignin(formData) {
+  _handleSignin(formData) {
     console.log(formData)
   },
 
-  signinFields() {
+  _signinFields() {
     let username = {}
-    username[FORM_CONSTANTS.FIELD.ELEMENT] = 'input'
-    username[FORM_CONSTANTS.FIELD.TYPE] = 'text'
-    username[FORM_CONSTANTS.FIELD.PLACEHOLDER] = 'username'
-    username[FORM_CONSTANTS.FIELD.NAME] = 'username'
-    username[FORM_CONSTANTS.FIELD.MANDATORY] = true
-
+      .tupled(FCST.FIELD.ELEMENT, 'input')
+      .tupled(FCST.FIELD.TYPE, 'text')
+      .tupled(FCST.FIELD.PLACEHOLDER, 'Username')
+      .tupled(FCST.FIELD.NAME, 'username')
+      .tupled(FCST.FIELD.MANDATORY, true)
+    
     let password = {}
-    password[FORM_CONSTANTS.FIELD.ELEMENT] = 'input'
-    password[FORM_CONSTANTS.FIELD.TYPE] = 'password'
-    password[FORM_CONSTANTS.FIELD.PLACEHOLDER] = 'password'
-    password[FORM_CONSTANTS.FIELD.NAME] = 'password'
-    password[FORM_CONSTANTS.FIELD.MANDATORY] = true
+      .tupled(FCST.FIELD.ELEMENT, 'input')
+      .tupled(FCST.FIELD.TYPE, 'password')
+      .tupled(FCST.FIELD.PLACEHOLDER, 'Password')
+      .tupled(FCST.FIELD.NAME, 'password')
+      .tupled(FCST.FIELD.MANDATORY, true)
 
     return(
       [username, password]

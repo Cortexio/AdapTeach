@@ -8,7 +8,8 @@ export default {
     TYPE: "type",
     PLACEHOLDER: "placeholder",
     NAME: "name",
-    MANDATORY: "mandatory"
+    MANDATORY: "mandatory",
+    STYLE: "style"
   },
 
   FIELD_TYPES : {
