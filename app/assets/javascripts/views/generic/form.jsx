@@ -83,12 +83,12 @@ var form = React.createClass({
 
           default: break;
         }
-      } else if(elem.mandatory) self.state.errors.push({field: elem.name, error: "the field " + elem.placeholder + " is mandatory"})
+      } else if(elem.mandatory) self.state.errors.push({field: elem.name, error: "the field " + elem.placeholder.toLowerCase() + " is mandatory"})
     })
     if(self.state.errors.length === 0) {
       let res = {}
       this.state.formData.forEach(function(elem, index) {
-        res[elem.name] = elem.value
+        if(elem.value) res[elem.name] = elem.value
       })
       this.props.submitAction(res)
     }
@@ -96,7 +96,7 @@ var form = React.createClass({
   },
 
   _handleChange(fieldname, event) {
-    this.state.formData[fieldname].value = event.target.value || null
+    this.state.formData[fieldname].value = event.target.value || undefined
   }
 })
 

@@ -31,7 +31,7 @@ var signin = React.createClass({
       .tupled(FCST.FIELD.TYPE, 'text')
       .tupled(FCST.FIELD.PLACEHOLDER, 'Username')
       .tupled(FCST.FIELD.NAME, 'username')
-      .tupled(FCST.FIELD.MANDATORY, true)
+      .tupled(FCST.FIELD.MANDATORY, false)
     
     let password = {}
       .tupled(FCST.FIELD.ELEMENT, 'input')
