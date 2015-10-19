@@ -1,4 +1,5 @@
 import React from 'react'
+import json from '../../helpers/json'
 
 import FCST from '../../constants/formConstants'
 
@@ -14,7 +15,7 @@ function signinInitialState() {
               style: field[FCST.FIELD.STYLE], type: field[FCST.FIELD.TYPE], placeholder: field[FCST.FIELD.PLACEHOLDER], value: null}
           return obj
         }).reduce(function(acc, field) {
-          return acc.merge(field)
+          return json.extend(acc, field)
         })
     }
   )
@@ -69,7 +70,7 @@ var form = React.createClass({
     event.preventDefault();
     this._resetErrors();
     var self = this
-    this.state.formData.forEach(function(elem, index) {
+    json.map(this.state.formData, function(elem, index) {
       if(elem && elem.value != null) {
         switch(elem.type) {
           case FCST.FIELD_TYPES.PASSWORD: 
@@ -88,7 +89,7 @@ var form = React.createClass({
     if(self.state.errors.length === 0) {
       let res = {}
       this.state.formData.forEach(function(elem, index) {
-        if(elem.value) res.tupled(elem.name, elem.value)
+        if(elem.value) json.tupled(res, elem.name, elem.value)
       })
       this.props.submitAction({params: res, method: self.props.method})
     }

@@ -5,10 +5,6 @@ import Form from '../generic/form'
 import FCST from '../../constants/formConstants'
 
 var signup = React.createClass({
-  componentWillMount() {
-    json.help()
-  },
-  
   render() {
     return (
       <div className="signup">
@@ -23,34 +19,34 @@ var signup = React.createClass({
 
   _signupFields() {
     let firstname = {}
-      .tupled(FCST.FIELD.ELEMENT, 'input')
-      .tupled(FCST.FIELD.TYPE, 'text')
-      .tupled(FCST.FIELD.PLACEHOLDER, 'First name')
-      .tupled(FCST.FIELD.NAME, 'firstname')
-      .tupled(FCST.FIELD.MANDATORY, true)
-      .tupled(FCST.FIELD.HALF_SIZE, FCST.FIELD.POSITION.LEFT)
+    json.tupled(firstname, FCST.FIELD.ELEMENT, 'input')
+    json.tupled(firstname, FCST.FIELD.TYPE, 'text')
+    json.tupled(firstname, FCST.FIELD.PLACEHOLDER, 'First name')
+    json.tupled(firstname, FCST.FIELD.NAME, 'firstname')
+    json.tupled(firstname, FCST.FIELD.MANDATORY, true)
+    json.tupled(firstname, FCST.FIELD.HALF_SIZE, FCST.FIELD.POSITION.LEFT)
 
     let lastname = {}
-      .tupled(FCST.FIELD.ELEMENT, 'input')
-      .tupled(FCST.FIELD.TYPE, 'text')
-      .tupled(FCST.FIELD.PLACEHOLDER, 'Last Name')
-      .tupled(FCST.FIELD.NAME, 'lastname')
-      .tupled(FCST.FIELD.MANDATORY, true)
-      .tupled(FCST.FIELD.HALF_SIZE, FCST.FIELD.POSITION.RIGHT)
+    json.tupled(lastname, FCST.FIELD.ELEMENT, 'input')
+    json.tupled(lastname, FCST.FIELD.TYPE, 'text')
+    json.tupled(lastname, FCST.FIELD.PLACEHOLDER, 'Last name')
+    json.tupled(lastname, FCST.FIELD.NAME, 'lastname')
+    json.tupled(lastname, FCST.FIELD.MANDATORY, true)
+    json.tupled(lastname, FCST.FIELD.HALF_SIZE, FCST.FIELD.POSITION.RIGHT)
 
     let username = {}
-      .tupled(FCST.FIELD.ELEMENT, 'input')
-      .tupled(FCST.FIELD.TYPE, 'text')
-      .tupled(FCST.FIELD.PLACEHOLDER, 'Username')
-      .tupled(FCST.FIELD.NAME, 'username')
-      .tupled(FCST.FIELD.MANDATORY, true)
+    json.tupled(username, FCST.FIELD.ELEMENT, 'input')
+    json.tupled(username, FCST.FIELD.TYPE, 'text')
+    json.tupled(username, FCST.FIELD.PLACEHOLDER, 'Username')
+    json.tupled(username, FCST.FIELD.NAME, 'username')
+    json.tupled(username, FCST.FIELD.MANDATORY, true)
     
     let password = {}
-      .tupled(FCST.FIELD.ELEMENT, 'input')
-      .tupled(FCST.FIELD.TYPE, 'password')
-      .tupled(FCST.FIELD.PLACEHOLDER, 'Password')
-      .tupled(FCST.FIELD.NAME, 'password')
-      .tupled(FCST.FIELD.MANDATORY, true)
+    json.tupled(password, FCST.FIELD.ELEMENT, 'input')
+    json.tupled(password, FCST.FIELD.TYPE, 'password')
+    json.tupled(password, FCST.FIELD.PLACEHOLDER, 'Password')
+    json.tupled(password, FCST.FIELD.NAME, 'password')
+    json.tupled(password, FCST.FIELD.MANDATORY, true)
 
     return(
       [firstname, lastname, username, password]

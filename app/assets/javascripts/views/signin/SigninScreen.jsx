@@ -5,10 +5,6 @@ import Form from '../generic/form'
 import FCST from '../../constants/formConstants'
 
 var signin = React.createClass({
-  componentWillMount() {
-    json.help()
-  },
-
   render() {
     return (
       <div className="signin">
@@ -29,18 +25,18 @@ var signin = React.createClass({
 
   _signinFields() {
     let username = {}
-      .tupled(FCST.FIELD.ELEMENT, 'input')
-      .tupled(FCST.FIELD.TYPE, 'text')
-      .tupled(FCST.FIELD.PLACEHOLDER, 'Username')
-      .tupled(FCST.FIELD.NAME, 'username')
-      .tupled(FCST.FIELD.MANDATORY, true)
+    json.tupled(username, FCST.FIELD.ELEMENT, 'input')
+    json.tupled(username, FCST.FIELD.TYPE, 'text')
+    json.tupled(username, FCST.FIELD.PLACEHOLDER, 'Username')
+    json.tupled(username, FCST.FIELD.NAME, 'username')
+    json.tupled(username, FCST.FIELD.MANDATORY, true)
     
     let password = {}
-      .tupled(FCST.FIELD.ELEMENT, 'input')
-      .tupled(FCST.FIELD.TYPE, 'password')
-      .tupled(FCST.FIELD.PLACEHOLDER, 'Password')
-      .tupled(FCST.FIELD.NAME, 'password')
-      .tupled(FCST.FIELD.MANDATORY, true)
+    json.tupled(password, FCST.FIELD.ELEMENT, 'input')
+    json.tupled(password, FCST.FIELD.TYPE, 'password')
+    json.tupled(password, FCST.FIELD.PLACEHOLDER, 'Password')
+    json.tupled(password, FCST.FIELD.NAME, 'password')
+    json.tupled(password, FCST.FIELD.MANDATORY, true)
 
     return(
       [username, password]
