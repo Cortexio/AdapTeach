@@ -12,56 +12,60 @@ case class User (
 
 case class Category (
 	id: BSONObjectID,
-	dname: String,
+	name: String,
 	parent: BSONObjectID
 	)
 
 case class Objective (
 	id: BSONObjectID,
-	title: String,
-	summary: String,
+	name: String,
+	description: Option[String],
 	children: Seq[BSONObjectID],
 	items: Seq[BSONObjectID]
 	)
 
 case class Item (
 	id: BSONObjectID,
-	title: String,
+	name: String,
 	description: Option[String],
 	category: BSONObjectID
 	)
 
-case class Preq (
-	id: String,
-	mandatory: Boolean,
-	item: Item,
-	active: Boolean
+case class Prerequisite (
+	item: BSONObjectID,
+	recall: Recall
 	)
 
+// TODO Replace this with Enum equivalent
+class Recall()
+case class ActiveRecall() extends Recall
+case class PassiveRecall() extends Recall
+case class NoRecall() extends Recall
+
 class Assessment(
-	testedItems: Seq[Item],
-	preqs: Seq[Preq]
+	testedItems: Seq[BSONObjectID],
+	prerequisites: Seq[Prerequisite]
 	)
 
 class QuestionAssessment(
-	testedItems: Seq[Item],
-	preqs: Seq[Preq],
+	testedItems: Seq[BSONObjectID],
+	prerequisites: Seq[Prerequisite],
 	question: Question
-	) extends Assessment(testedItems, preqs)
+	) extends Assessment(testedItems, prerequisites)
 
 case class YesOrNoQuestion(
-	testedItems: Seq[Item],
-	preqs: Seq[Preq],
+	testedItems: Seq[BSONObjectID],
+	prerequisites: Seq[Prerequisite],
 	question: Question,
 	correctAnswer: Boolean
-	) extends QuestionAssessment(testedItems, preqs, question)
+	) extends QuestionAssessment(testedItems, prerequisites, question)
 
 case class MCQ(
-	testedItems: Seq[Item],
-	preqs: Seq[Preq],
+	testedItems: Seq[BSONObjectID],
+	prerequisites: Seq[Prerequisite],
 	question: Question,
 	answers: Seq[Answer]
-	) extends QuestionAssessment(testedItems, preqs, question)
+	) extends QuestionAssessment(testedItems, prerequisites, question)
 
 class Question(
 	question: String

@@ -7,9 +7,9 @@ object Sample {
 				// Map is immutable
 				),
 			Seq( // Prerequisites
-				// Creating a map with companion object
-				// Declaring a val
-				// Using the += operator on a Map 
+				// Creating a map with companion object (PassiveRecall)
+				// Declaring a val (PassiveRecall)
+				// Using the += operator on a Map (PassiveRecall) 
 				), 
 			QuestionWithCode(
 				"Is the second instruction valid ?",
@@ -24,9 +24,9 @@ object Sample {
 				// A val can't be reassigned
 				),
 			Seq( // Prerequisites
-				// Creating a map with companion object
-				// Declaring a val
-				// Using the + operator on a Map 
+				// Creating a map with companion object (PassiveRecall)
+				// Declaring a val (PassiveRecall)
+				// Using the + operator on a Map (PassiveRecall)
 				), 
 			QuestionWithCode(
 				"Is the second instruction valid ?",
@@ -42,10 +42,10 @@ object Sample {
 				// A var can be reassigned
 				),
 			Seq( // Prerequisites
-				// Creating a map with companion object
-				// Declaring a var
-				// Using the += operator on a Map 
-				// Using the + operator on a Map 
+				// Creating a map with companion object (PassiveRecall)
+				// Declaring a var (PassiveRecall)
+				// Using the += operator on a Map (PassiveRecall)
+				// Using the + operator on a Map (PassiveRecall)
 				), 
 			QuestionWithCode(
 				"Considering this code, is the following instruction valid ?",
@@ -56,29 +56,29 @@ object Sample {
 				Answer(true, """salaries = salaries + ("Steve" -> 3000)""", Seq())
 				)
 			)
-/**
 
-		val assessment2b = Assessment(
+	val assessment2b = MCQ(
 			Seq( // Tested items
 				// Map is immutable
 				// A var can be reassigned
 				),
 			Seq( // Prerequisites
-				// Creating a map with companion object
-				// Declaring a var
-				// Using the += operator on a Map 
-				// Using the + operator on a Map 
+				// Creating a map with companion object (PassiveRecall)
+				// Declaring a var (PassiveRecall)
+				// Using the += operator on a Map (PassiveRecall)
+				// Using the + operator on a Map (PassiveRecall)
 				), 
-			YesOrNoQuestionWithCode(), // Kind
 			QuestionWithCode(
 				"Considering this code, is the following instruction valid ?",
-				Code("Java", """var salaries = Map("Bob" -> 1000, "John" -> 2000)""")
+				Seq(Snippet("Java", """var salaries = Map("Bob" -> 1000, "John" -> 2000)"""))
 				),
 			Seq( // Answers
 				Answer(false, """salaries += ("Steve" -> 3000)""", Seq()),
 				Answer(true, """salaries = salaries + ("Steve" -> 3000)""", Seq())
 				)
 			)
+
+/**
 
 	val assessment3 = Assessment(
 			Seq( // Tested items
