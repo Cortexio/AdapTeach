@@ -43,33 +43,37 @@ case class PassiveRecall() extends Recall
 case class NoRecall() extends Recall
 
 class Assessment(
-	testedItems: Seq[BSONObjectID],
+	assessedItems: Seq[BSONObjectID],
 	prerequisites: Seq[Prerequisite]
 	)
 
 class QuestionAssessment(
-	testedItems: Seq[BSONObjectID],
+	assessedItems: Seq[BSONObjectID],
 	prerequisites: Seq[Prerequisite],
 	question: Question
-	) extends Assessment(testedItems, prerequisites)
+	) extends Assessment(assessedItems, prerequisites)
 
 case class YesOrNoQuestion(
-	testedItems: Seq[BSONObjectID],
+	assessedItems: Seq[BSONObjectID],
 	prerequisites: Seq[Prerequisite],
 	question: Question,
 	correctAnswer: Boolean
-	) extends QuestionAssessment(testedItems, prerequisites, question)
+	) extends QuestionAssessment(assessedItems, prerequisites, question)
 
 case class MCQ(
-	testedItems: Seq[BSONObjectID],
+	assessedItems: Seq[BSONObjectID],
 	prerequisites: Seq[Prerequisite],
 	question: Question,
 	answers: Seq[Answer]
-	) extends QuestionAssessment(testedItems, prerequisites, question)
+	) extends QuestionAssessment(assessedItems, prerequisites, question)
 
 class Question(
 	question: String
 	)
+
+case class SimpleQuestion(
+	question: String
+	) extends Question(question)
 
 case class QuestionWithCode(
 	question: String,
@@ -81,8 +85,16 @@ case class Snippet(
 	text: String
 	) 
 
-case class Answer(
-	isCorrect: Boolean,
-	text: String,
-	testedItems: Seq[BSONObjectID]
+class Answer(
+	isCorrect: Boolean
 	)
+
+case class SimpleAnswer(
+	isCorrect: Boolean,
+	text: String
+	) extends Answer(isCorrect)
+
+case class SnippetAnswer(
+	isCorrect: Boolean,
+	snippet: Snippet
+	) extends Answer(isCorrect)

@@ -1,9 +1,9 @@
 package models
 
-object Sample {
+object ScalaMapSampleAssessments {
 
-	val assessment1a = YesOrNoQuestion( // CodeYesOrNoQuestion
-			Seq( // Tested items
+	val assessment1a = YesOrNoQuestion(
+			Seq( // Assessed items
 				// Map is immutable
 				),
 			Seq( // Prerequisites
@@ -20,7 +20,7 @@ object Sample {
 			)
 
 	val assessment1b = YesOrNoQuestion(
-			Seq( // Tested items
+			Seq( // Assessed items
 				// A val can't be reassigned
 				),
 			Seq( // Prerequisites
@@ -37,7 +37,7 @@ object Sample {
 			)
 
 	val assessment2a = MCQ(
-			Seq( // Tested items
+			Seq( // Assessed items
 				// Map is immutable
 				// A var can be reassigned
 				),
@@ -52,13 +52,13 @@ object Sample {
 				Seq(Snippet("Java", """var salaries = Map("Bob" -> 1000, "John" -> 2000)"""))
 				),
 			Seq( // Answers
-				Answer(false, """salaries += ("Steve" -> 3000)""", Seq()),
-				Answer(true, """salaries = salaries + ("Steve" -> 3000)""", Seq())
+				SimpleAnswer(false, """salaries += ("Steve" -> 3000)"""),
+				SimpleAnswer(true, """salaries = salaries + ("Steve" -> 3000)""")
 				)
 			)
 
 	val assessment2b = MCQ(
-			Seq( // Tested items
+			Seq( // Assessed items
 				// Map is immutable
 				// A var can be reassigned
 				),
@@ -73,8 +73,8 @@ object Sample {
 				Seq(Snippet("Java", """var salaries = Map("Bob" -> 1000, "John" -> 2000)"""))
 				),
 			Seq( // Answers
-				Answer(false, """salaries += ("Steve" -> 3000)""", Seq()),
-				Answer(true, """salaries = salaries + ("Steve" -> 3000)""", Seq())
+				SimpleAnswer(false, """salaries += ("Steve" -> 3000)"""),
+				SimpleAnswer(true, """salaries = salaries + ("Steve" -> 3000)""")
 				)
 			)
 
