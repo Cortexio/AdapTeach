@@ -31,16 +31,14 @@ case class Item (
 	category: BSONObjectID
 	)
 
+object Recall extends Enumeration {
+	val Active, Passive, None = Value
+}
+
 case class Prerequisite (
 	item: BSONObjectID,
-	recall: Recall
+	recall: Recall.Value
 	)
-
-// TODO Replace this with Enum equivalent
-class Recall()
-case class ActiveRecall() extends Recall
-case class PassiveRecall() extends Recall
-case class NoRecall() extends Recall
 
 class Assessment(
 	assessedItems: Seq[BSONObjectID],
