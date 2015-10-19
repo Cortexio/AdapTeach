@@ -58,19 +58,17 @@ var form = React.createClass({
     )
   },
 
-  hashPasswd(password) {
-    return password
-  },
-
   _resetErrors() {
     this.state.errors = []
+    this.setState(this.state)
   },
 
   _validateForm(event) {
-    event.preventDefault();
-    this._resetErrors();
+    event.preventDefault()
+    this._resetErrors()
     var self = this
-    json.map(this.state.formData, function(elem, index) {
+    for(let fieldname in this.state.formData) {
+      let elem = this.state.formData[fieldname]
       if(elem && elem.value != null) {
         switch(elem.type) {
           case FCST.FIELD_TYPES.PASSWORD: 
@@ -85,12 +83,14 @@ var form = React.createClass({
           default: break;
         }
       } else if(elem.mandatory) self.state.errors.push({field: elem.name, error: "the field " + elem.placeholder.toLowerCase() + " is mandatory"})
-    })
+    }
+
     if(self.state.errors.length === 0) {
       let res = {}
-      this.state.formData.forEach(function(elem, index) {
+      for(let fieldname in this.state.formData) {
+      let elem = this.state.formData[fieldname]
         if(elem.value) json.tupled(res, elem.name, elem.value)
-      })
+      }
       this.props.submitAction({params: res, method: self.props.method})
     }
     else this.setState(this.state)

@@ -1,0 +1,1 @@
+form .feedback,form input{font-size:1.2rem;width:100%;margin-bottom:1.6rem}form .feedback{display:block;color:red;text-align:center;height:1.2rem}form input{padding:1rem;border:none}form input.half{width:calc(50% - .8rem)}form input.half.left{margin-right:1.6rem}form input[type=submit]{border:none;padding:1.2rem;text-transform:uppercase;color:#FFF;background-color:#f5b45d}

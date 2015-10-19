@@ -1,9 +1,10 @@
 package controllers
 
 import play.api._
+import play.api.mvc._
 import play.api.{ data => PlayForm }
 
-object Controller {
+abstract class CommonController extends Controller {
 
   val rxemail = """.+\@.+\..+""".r
   def strictEmail = {

@@ -1,9 +1,26 @@
-import qajax from 'qajax';
+import Axios from 'axios';
 
-export function signin() {
-
+function ajaxWithFeedback(method, params, url) {
+  return Axios({
+    method: method,
+    url: url,
+    data: params
+  })
+  .catch(function (response) {
+    if (response instanceof Error) {
+      console.log(response.message)
+    } else {
+      console.log(response);
+    }
+  })
 }
 
-export function signup() {
-  return qajax.getJSON('/bo/assets/data/profilsExternes.json');
+export default {
+  signin(method, params) {
+    return ajaxWithFeedback(method, params, '/api/signin')
+  },
+
+  signup(method, params) {
+    return ajaxWithFeedback(method, params, '/api/signup')
+  }
 }
