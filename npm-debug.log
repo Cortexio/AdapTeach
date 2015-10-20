@@ -1,0 +1,69 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'D:\\node.exe',
+1 verbose cli   'D:\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'install',
+1 verbose cli   'activator' ]
+2 info using npm@2.14.7
+3 info using node@v4.2.1
+4 verbose install initial load of C:\Users\Aria\Desktop\AdapTeach\package.json
+5 verbose installManyTop reading scoped package data from C:\Users\Aria\Desktop\AdapTeach\node_modules\abyssa\package.json
+6 verbose installManyTop reading scoped package data from C:\Users\Aria\Desktop\AdapTeach\node_modules\activator\package.json
+7 verbose installManyTop reading scoped package data from C:\Users\Aria\Desktop\AdapTeach\node_modules\babelify\package.json
+8 verbose installManyTop reading scoped package data from C:\Users\Aria\Desktop\AdapTeach\node_modules\browserify\package.json
+9 verbose installManyTop reading scoped package data from C:\Users\Aria\Desktop\AdapTeach\node_modules\fluxx\package.json
+10 verbose installManyTop reading scoped package data from C:\Users\Aria\Desktop\AdapTeach\node_modules\gulp\package.json
+11 verbose installManyTop reading scoped package data from C:\Users\Aria\Desktop\AdapTeach\node_modules\gulp-autoprefixer\package.json
+12 verbose installManyTop reading scoped package data from C:\Users\Aria\Desktop\AdapTeach\node_modules\gulp-concat\package.json
+13 verbose installManyTop reading scoped package data from C:\Users\Aria\Desktop\AdapTeach\node_modules\gulp-minify-css\package.json
+14 verbose installManyTop reading scoped package data from C:\Users\Aria\Desktop\AdapTeach\node_modules\gulp-rename\package.json
+15 verbose installManyTop reading scoped package data from C:\Users\Aria\Desktop\AdapTeach\node_modules\gulp-sass\package.json
+16 verbose installManyTop reading scoped package data from C:\Users\Aria\Desktop\AdapTeach\node_modules\gulp-uglify\package.json
+17 verbose installManyTop reading scoped package data from C:\Users\Aria\Desktop\AdapTeach\node_modules\keymirror\package.json
+18 verbose installManyTop reading scoped package data from C:\Users\Aria\Desktop\AdapTeach\node_modules\object-assign\package.json
+19 verbose installManyTop reading scoped package data from C:\Users\Aria\Desktop\AdapTeach\node_modules\react\package.json
+20 verbose installManyTop reading scoped package data from C:\Users\Aria\Desktop\AdapTeach\node_modules\react-dom\package.json
+21 verbose installManyTop reading scoped package data from C:\Users\Aria\Desktop\AdapTeach\node_modules\uglify\package.json
+22 verbose installManyTop reading scoped package data from C:\Users\Aria\Desktop\AdapTeach\node_modules\vinyl-buffer\package.json
+23 verbose installManyTop reading scoped package data from C:\Users\Aria\Desktop\AdapTeach\node_modules\vinyl-source-stream\package.json
+24 info package.json activator@1.0.3 No license field.
+25 info package.json abyssa@7.2.0 No license field.
+26 info package.json fluxx@0.12.1 No license field.
+27 info package.json keymirror@0.1.1 No license field.
+28 info package.json gulp-rename@1.2.2 No license field.
+29 info package.json uglify@0.1.5 No license field.
+30 verbose readDependencies loading dependencies from C:\Users\Aria\Desktop\AdapTeach\package.json
+31 verbose install activator is installed as 1.0.3
+32 silly cache add args [ 'activator', null ]
+33 verbose cache add spec activator
+34 silly cache add parsed spec Result {
+34 silly cache add   raw: 'activator',
+34 silly cache add   scope: null,
+34 silly cache add   name: null,
+34 silly cache add   rawSpec: 'activator',
+34 silly cache add   spec: 'C:\\Users\\Aria\\Desktop\\AdapTeach\\activator',
+34 silly cache add   type: 'local' }
+35 silly addLocalTarball shasum (computed) 5d9d3842d21c1eb151fa67ced853b58dd9d3319d
+36 verbose addTmpTarball C:\Users\Aria\Desktop\AdapTeach\activator not in flight; adding
+37 verbose addTmpTarball validating metadata from C:\Users\Aria\Desktop\AdapTeach\activator
+38 verbose tar unpack C:\Users\Aria\Desktop\AdapTeach\activator
+39 verbose tar unpacking to C:\Users\Aria\AppData\Local\Temp\npm-18660-460adfb3\unpack-28b5a725df06
+40 silly gentlyRm C:\Users\Aria\AppData\Local\Temp\npm-18660-460adfb3\unpack-28b5a725df06 is being purged
+41 verbose gentlyRm don't care about contents; nuking C:\Users\Aria\AppData\Local\Temp\npm-18660-460adfb3\unpack-28b5a725df06
+42 silly gunzTarPerm modes [ '777', '666' ]
+43 error not a package C:\Users\Aria\Desktop\AdapTeach\activator
+44 error addLocal Could not install C:\Users\Aria\Desktop\AdapTeach\activator
+45 verbose stack Error: ENOENT: no such file or directory, open 'C:\Users\Aria\AppData\Local\Temp\npm-18660-460adfb3\unpack-28b5a725df06\package.json'
+45 verbose stack     at Error (native)
+46 verbose cwd C:\Users\Aria\Desktop\AdapTeach
+47 error Windows_NT 10.0.10240
+48 error argv "D:\\node.exe" "D:\\node_modules\\npm\\bin\\npm-cli.js" "install" "activator"
+49 error node v4.2.1
+50 error npm  v2.14.7
+51 error path C:\Users\Aria\AppData\Local\Temp\npm-18660-460adfb3\unpack-28b5a725df06\package.json
+52 error code ENOENT
+53 error errno -4058
+54 error syscall open
+55 error enoent ENOENT: no such file or directory, open 'C:\Users\Aria\AppData\Local\Temp\npm-18660-460adfb3\unpack-28b5a725df06\package.json'
+55 error enoent This is most likely not a problem with npm itself
+55 error enoent and is related to npm not being able to find a file.
+56 verbose exit [ -4058, true ]
