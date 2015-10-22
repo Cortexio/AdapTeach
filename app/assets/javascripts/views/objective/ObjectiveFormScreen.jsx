@@ -4,7 +4,7 @@ import json from '../../helpers/json'
 import Form from '../generic/form'
 import FCST from '../../constants/formConstants'
 
-var signin = React.createClass({
+var objectiveForm = React.createClass({
   getInitialState: function() {
 
     var itemsFetched = [
@@ -19,28 +19,28 @@ var signin = React.createClass({
         {id: 3, text: "Learn loops"}
       ];
 
-    return {itemsFetched: itemsFetched,subObjectivesFetched: subObjectivesFetched};
+    return {itemsFetched: itemsFetched,subObjectivesFetched: subObjectivesFetched}
   },
 
   render() {
     return (
-      <div className="signin">
+      <div className="objectiveForm">
         <div className="form-wrapper">
           <Form
             method="POST"
-            fields={this._signinFields()}
-            submitAction={this._handleSignin}
-            submitValue="Sign in" />
+            fields={this._formFields()}
+            submitAction={this._handleForm}
+            submitValue="Submit" />
           </div>
       </div> 
     )
   },
 
-  _handleSignin(formData) {
+  _handleForm(formData) {
     console.log(formData)
   },
 
-  _signinFields() {
+  _formFields() {
     let objectiveName = {}
     json.tupled(objectiveName, FCST.FIELD.ELEMENT, 'input')
     json.tupled(objectiveName, FCST.FIELD.TYPE, 'text')
@@ -50,14 +50,16 @@ var signin = React.createClass({
     
     let subObjectives = {}
     json.tupled(subObjectives, FCST.FIELD.ELEMENT, 'select')
-    json.tupled(subObjectives, FCST.FIELD.NAME, 'Sub Objectives')
+    json.tupled(subObjectives, FCST.FIELD.NAME, 'subObjectives')
+    json.tupled(subObjectives, FCST.FIELD.LABEL, 'Sub Objectives')
     json.tupled(subObjectives, FCST.FIELD.ID, 'subObjectives')
     json.tupled(subObjectives, FCST.FIELD.OPTIONS, this.state.subObjectivesFetched)
     json.tupled(subObjectives, FCST.FIELD.MULTIPLE, true)
 
     let items = {}
     json.tupled(items, FCST.FIELD.ELEMENT, 'select')
-    json.tupled(items, FCST.FIELD.NAME, 'Items')
+    json.tupled(items, FCST.FIELD.NAME, 'items')
+    json.tupled(items, FCST.FIELD.LABEL, 'Items')
     json.tupled(items, FCST.FIELD.ID, 'items')
     json.tupled(items, FCST.FIELD.OPTIONS, this.state.itemsFetched)
     json.tupled(items, FCST.FIELD.MANDATORY, true)
@@ -70,4 +72,4 @@ var signin = React.createClass({
 
 })
 
-export default signin
+export default objectiveForm

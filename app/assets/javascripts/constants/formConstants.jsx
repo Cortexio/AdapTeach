@@ -10,6 +10,7 @@ export default {
     PLACEHOLDER: "placeholder",
     NAME: "name",
     MANDATORY: "mandatory",
+    LABEL: "label",
     MULTIPLE: "multiple",
     ID: "id",
     OPTIONS: "options",

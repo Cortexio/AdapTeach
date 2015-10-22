@@ -1,9 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import SigninScreen from './SigninScreen'
+import ObjectiveFormScreen from './ObjectiveFormScreen'
 
 export default {
   enter() {
-    ReactDOM.render(<SigninScreen />, document.getElementById('content'))
+    ReactDOM.render(<ObjectiveFormScreen />, document.getElementById('content'))
   }
 };

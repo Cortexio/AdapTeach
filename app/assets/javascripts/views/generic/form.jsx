@@ -3,6 +3,12 @@ import json from '../../helpers/json'
 
 import FCST from '../../constants/formConstants'
 
+var SelectBox = React.createFactory(require("../../../../../node_modules/react-select-box/lib/select-box"))
+
+var div = React.createElement.bind(null,'div')
+var option = React.createElement.bind(null,'option')
+var h1 = React.createElement.bind(null,'h1')
+
 function signinInitialState() {
   return (
     {
@@ -13,11 +19,13 @@ function signinInitialState() {
           obj[field[FCST.FIELD.NAME]] = 
             {name: field[FCST.FIELD.NAME], element: field[FCST.FIELD.ELEMENT], mandatory: field[FCST.FIELD.MANDATORY], half: field[FCST.FIELD.HALF_SIZE],
               style: field[FCST.FIELD.STYLE], type: field[FCST.FIELD.TYPE], placeholder: field[FCST.FIELD.PLACEHOLDER], placeholder: field[FCST.FIELD.PLACEHOLDER],
-              id: field[FCST.FIELD.ID], multiple: field[FCST.FIELD.MULTIPLE], options: field[FCST.FIELD.OPTIONS], value: null}
+              id: field[FCST.FIELD.ID], multiple: field[FCST.FIELD.MULTIPLE], options: field[FCST.FIELD.OPTIONS], label: field[FCST.FIELD.LABEL], value: null}
           return obj
         }).reduce(function(acc, field) {
           return json.extend(acc, field)
-        })
+        }),
+      value: null,
+      values: []
     }
   )
 }
@@ -35,7 +43,6 @@ var form = React.createClass({
   render() {
     let self = this
     let fields = this.props.fields.map(function(field, index) {
-      console.log(field)
       switch(field.element) {
         case FCST.FIELDS.INPUT : return self.renderInput(self.state.formData[field[FCST.FIELD.NAME]])
         case FCST.FIELDS.SELECT : return self.renderSelect(self.state.formData[field[FCST.FIELD.NAME]])
@@ -62,16 +69,26 @@ var form = React.createClass({
   },
 
   renderSelect(field) {
-    console.log(field)
+
     var options = field.options.map(function(item) {
-      return <option key={item.id} value={item.text}>{item.text}</option>;
+      return option({key: item.id,value: item.text}, item.text)
     })
 
+
     return (
-      <select key={field.name} multiple={ field.multiple ? "multiple" : '' } id={field.id} 
-        name={field.name} onChange={this._handleChange.bind(null, field.name)}>
-        {options}
-      </select>
+      div({key:field.name,className: "example"},
+        h1(null, field.label),
+        SelectBox(
+          {
+            name:field.name,
+            label: field.label,
+            value: field.multiple ? this.state.values : this.state.value,
+            onChange: field.multiple ? this._handleMultiSelectChange : this._handleSelectChange,
+            multiple: field.multiple ? true : false
+          },
+          options
+        )
+      )
     )
   },
 
@@ -112,9 +129,15 @@ var form = React.createClass({
     }
     else this.setState(this.state)
   },
-
   _handleChange(fieldname, event) {
+    console.log(this.state.formData[fieldname])
     this.state.formData[fieldname].value = event.target.value || undefined
+  },
+  _handleSelectChange(value) {
+    this.setState({ value: value })
+  },
+  _handleMultiSelectChange(values) {
+    this.setState({ values: values })
   }
 })
 
