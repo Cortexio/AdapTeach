@@ -12,7 +12,8 @@ function signinInitialState() {
           let obj = {}
           obj[field[FCST.FIELD.NAME]] = 
             {name: field[FCST.FIELD.NAME], element: field[FCST.FIELD.ELEMENT], mandatory: field[FCST.FIELD.MANDATORY], half: field[FCST.FIELD.HALF_SIZE],
-              style: field[FCST.FIELD.STYLE], type: field[FCST.FIELD.TYPE], placeholder: field[FCST.FIELD.PLACEHOLDER], value: null}
+              style: field[FCST.FIELD.STYLE], type: field[FCST.FIELD.TYPE], placeholder: field[FCST.FIELD.PLACEHOLDER], placeholder: field[FCST.FIELD.PLACEHOLDER],
+              id: field[FCST.FIELD.ID], multiple: field[FCST.FIELD.MULTIPLE], options: field[FCST.FIELD.OPTIONS], value: null}
           return obj
         }).reduce(function(acc, field) {
           return json.extend(acc, field)
@@ -34,8 +35,10 @@ var form = React.createClass({
   render() {
     let self = this
     let fields = this.props.fields.map(function(field, index) {
+      console.log(field)
       switch(field.element) {
         case FCST.FIELDS.INPUT : return self.renderInput(self.state.formData[field[FCST.FIELD.NAME]])
+        case FCST.FIELDS.SELECT : return self.renderSelect(self.state.formData[field[FCST.FIELD.NAME]])
         default : console.log(field)
       }
     })
@@ -55,6 +58,20 @@ var form = React.createClass({
         className={field.half ? 'half ' + field.half : '' + field.style || ''}
         placeholder={field.placeholder} name={field.name} 
         onChange={this._handleChange.bind(null, field.name)} />
+    )
+  },
+
+  renderSelect(field) {
+    console.log(field)
+    var options = field.options.map(function(item) {
+      return <option key={item.id} value={item.text}>{item.text}</option>;
+    })
+
+    return (
+      <select key={field.name} multiple={ field.multiple ? "multiple" : '' } id={field.id} 
+        name={field.name} onChange={this._handleChange.bind(null, field.name)}>
+        {options}
+      </select>
     )
   },
 

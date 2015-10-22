@@ -1,6 +1,7 @@
 export default {
   FIELDS : {
-    INPUT: "input"
+    INPUT: "input",
+    SELECT: "select"
   },
 
   FIELD : {
@@ -9,6 +10,9 @@ export default {
     PLACEHOLDER: "placeholder",
     NAME: "name",
     MANDATORY: "mandatory",
+    MULTIPLE: "multiple",
+    ID: "id",
+    OPTIONS: "options",
     STYLE: "style",
     HALF_SIZE: "half",
     POSITION: {
