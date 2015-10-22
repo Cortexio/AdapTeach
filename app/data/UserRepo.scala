@@ -2,6 +2,7 @@ package dataAccess
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import reactivemongo.bson.BSONDocument
 
 import play.api.libs.iteratee.Iteratee
 

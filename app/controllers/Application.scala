@@ -30,8 +30,8 @@ class Application extends Controller {
     )
   }
 
-  def test() = Action.async {
-    CategoryRepo.create("Math") map { category =>
+  def test(name: String) = Action.async {
+    CategoryRepo.create(name) map { category =>
       Ok(views.html.test(category.name))
     }
   }

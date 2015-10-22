@@ -17,14 +17,8 @@ object CategoryRepo {
 		collection.insert(category) flatMap { res =>
 			for {
 				maybeCat: Option[Category] <- collection.find(BSONDocument("_id" -> id)).one[Category]
-				cat: Category = maybeCat.getOrElse(throw new RuntimeException())
+				cat: Category = maybeCat.getOrElse(throw new RuntimeException(res.message))
 			} yield cat
 		}
 	}
-
-  //	def find(username: String) : Future[Option[Category]] = {
-  //	  val query = BSONDocument("username" -> username)
-  //	  collection.find(query).one[Category]
-  //	}
-
 }
