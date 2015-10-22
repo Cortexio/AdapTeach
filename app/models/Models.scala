@@ -1,10 +1,10 @@
 package models
 
-import reactivemongo.bson.{BSONObjectID}
+import reactivemongo.bson._
 import org.joda.time.{DateTime}
 
 case class User (
-	id : BSONObjectID,
+	_id : BSONObjectID,
 	username: String,
 	email: String,
 	firstName: String,
@@ -31,13 +31,17 @@ case class AssessmentEvent (
 	)
 
 case class Category (
-	id: BSONObjectID,
-	name: String,
-	parent: BSONObjectID
+	_id: BSONObjectID,
+	name: String
+	// parent: Option[BSONObjectID]
 	)
+object Category {
+	implicit val categoryReader: BSONDocumentReader[Category] = Macros.reader[Category]
+	implicit val categoryWriter: BSONDocumentWriter[Category] = Macros.writer[Category]
+}
 
 case class Objective (
-	id: BSONObjectID,
+	_id: BSONObjectID,
 	name: String,
 	description: Option[String],
 	children: Seq[BSONObjectID],
@@ -45,7 +49,7 @@ case class Objective (
 	)
 
 case class Item (
-	id: BSONObjectID,
+	_id: BSONObjectID,
 	name: String,
 	description: Option[String],
 	category: BSONObjectID

@@ -7,7 +7,10 @@ import play.api._
 import play.api.mvc._
 import play.api.libs.json._
 
+import reactivemongo.bson.BSONObjectID
+
 import dataAccess._
+import models.{Category, CategoryRepo}
 
 class Application extends Controller {
 
@@ -25,5 +28,11 @@ class Application extends Controller {
         case None => Redirect(routes.Application.index(""))
       }
     )
+  }
+
+  def test() = Action.async {
+    CategoryRepo.create("Math") map { category =>
+      Ok(views.html.test(category.name))
+    }
   }
 }
