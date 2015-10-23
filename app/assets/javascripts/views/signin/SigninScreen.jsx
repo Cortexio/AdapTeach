@@ -3,8 +3,9 @@ import json from '../../helpers/json'
 
 import Form from '../generic/form'
 import FCST from '../../constants/formConstants'
+import { signin } from '../../actions/authActions'
 
-var signin = React.createClass({
+export default React.createClass({
   render() {
     return (
       <div className="signin">
@@ -20,7 +21,7 @@ var signin = React.createClass({
   },
 
   _handleSignin(formData) {
-    console.log(formData)
+    signin(formData)
   },
 
   _signinFields() {
@@ -44,5 +45,3 @@ var signin = React.createClass({
   }
 
 })
-
-export default signin

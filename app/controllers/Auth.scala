@@ -19,24 +19,18 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 import play.api.libs._
 import play.api.libs.json._
+import reactivemongo.bson._
+import scala.util.{ Failure, Success }
 
+import dataAccess.{UserRepo}
+import models.{User}
 
-import dataAccess.{User, UserRepo}
+import org.mindrot.jbcrypt.{BCrypt}
 
 class Auth extends CommonController {
  
-  val signinForm = Form(
-    tuple(
-      "username" ->  text.verifying("Enter your last name", !_.trim.isEmpty),
-      "password" -> longPassword
-    )
-  )
-
-  val signupForm = Form (
-    tuple(
-      "firstname" -> text.verifying("Enter your first name", !_.trim.isEmpty),
-      "lastname" -> text.verifying("Enter your last name", !_.trim.isEmpty),
-      "email" -> strictEmail,
+  val signinForm = Form (
+    tuple (
       "username" ->  text.verifying("Enter your last name", !_.trim.isEmpty),
       "password" -> longPassword
     )
@@ -50,18 +44,27 @@ class Auth extends CommonController {
       }, 
       {
         case (username, password) =>
-          val futureMaybeUser: Future[Option[User]] = UserRepo.find(username)
           for(
-            maybeUser <- futureMaybeUser
+            maybeUser <- UserRepo.signin(username, password)
           ) yield (
             maybeUser match {
-              case Some(user) => Ok(Json.obj("auth" -> "reussi")) //return user as json
-              case None => BadRequest(Json.obj("errors" -> Json.obj("username" -> "Invalid username")))
+              case Some(user) => Ok(Json.obj("session" -> user)).withSession("user" -> Json.stringify(User.toJson(user)))
+              case None => BadRequest(Json.obj("errors" -> Json.obj("username" -> "Authentication failed !")))
             }
           )
       }
     )
   }
+
+  val signupForm = Form (
+    tuple(
+      "firstname" -> text.verifying("Enter your first name", !_.trim.isEmpty),
+      "lastname" -> text.verifying("Enter your last name", !_.trim.isEmpty),
+      "email" -> strictEmail,
+      "username" ->  text.verifying("Enter your last name", !_.trim.isEmpty),
+      "password" -> longPassword
+    )
+  )
 
   def signup() = Action.async { implicit req =>
     signupForm.bindFromRequest.fold(
@@ -71,8 +74,16 @@ class Auth extends CommonController {
       }, 
       {
         case (firstname, lastname, email, username, password) =>
-          Future.successful(Ok(Json.obj("auth" -> "done")))
+        val bsonId = BSONObjectID.generate
+        val hash = BCrypt.hashpw(password, BCrypt.gensalt())
+        val user = User(bsonId, firstname, lastname, email, username, hash)
+        UserRepo.insert(user)
+        Future.successful(Ok(Json.obj("session" -> user)).withSession("user" -> Json.stringify(User.toJson(user))))
       }
     )
+  }
+
+  def logout() = Action { request =>
+    Ok(views.html.index()).withNewSession
   }
 }

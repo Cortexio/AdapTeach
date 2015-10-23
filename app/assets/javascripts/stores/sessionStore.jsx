@@ -1,10 +1,8 @@
-import { ActorStore} from 'fluxx'
+import { Store } from 'fluxx'
 
 import {authDispatcher} from '../actions/authActions'
 
 export default Store(on => {
-  dependOn(otherStore);
-
   // The store's private state; The store could have many of these.
   let session = {}
 
@@ -14,11 +12,9 @@ export default Store(on => {
     session = data
   })
 
-  on(authDispatcher.REMOVE_SESSION => {
-    session = {}
-  })
+  on(authDispatcher.REMOVE_SESSION, _ => session = {})
 
   return {
     session: () => session
-  };
-});
+  }
+})
