@@ -30,7 +30,7 @@ import org.mindrot.jbcrypt.{BCrypt}
 class Auth extends CommonController {
  
   val signinForm = Form (
-    tuple (
+    tuple  (
       "username" ->  text.verifying("Enter your last name", !_.trim.isEmpty),
       "password" -> longPassword
     )
@@ -86,4 +86,6 @@ class Auth extends CommonController {
   def logout() = Action { request =>
     Ok(views.html.index()).withNewSession
   }
+
+  def availableEmail()
 }

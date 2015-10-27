@@ -30,15 +30,20 @@ class AuthenticatedRequest[A](val user: User, request: Request[A]) extends Wrapp
 
 object WithSession extends ActionBuilder[AuthenticatedRequest] {
   def invokeBlock[A](request: Request[A], block: (AuthenticatedRequest[A]) => Future[Result]) = {
-    request.session.get("user").map { userAsJson =>
-      val maybeUser = User.fromJson(Json.parse(userAsJson))
-      maybeUser.map { user =>
-        block(new AuthenticatedRequest(user, request))
-      } getOrElse {
-        Future.successful(Forbidden)
-      }
-    } getOrElse {
-      Future.successful(Forbidden)
+    request.session.get("user") match {
+      case Some(user) => block(new AuthenticatedRequest(User.fromJson(Json.parse(user)).get, request))
+      case None => Future.successful(Forbidden)
+    }
+  }
+}
+
+class MaybeAuthenticatedRequest[A](val user: Option[User], request: Request[A]) extends WrappedRequest[A](request)
+
+object WithMaybeSession extends ActionBuilder[MaybeAuthenticatedRequest] {
+  def invokeBlock[A](request: Request[A], block: (MaybeAuthenticatedRequest[A]) => Future[Result]) = {
+    request.session.get("user") match { 
+      case Some(user) => block(new MaybeAuthenticatedRequest(Some(User.fromJson(Json.parse(user)).get), request))
+      case None => block(new MaybeAuthenticatedRequest(None, request))
     }
   }
 }

@@ -14,7 +14,8 @@ export default {
     POSITION: {
       LEFT: "left",
       RIGHT: "right"
-    }
+    },
+    UNIQUE: "unique"
   },
 
   FIELD_TYPES : {

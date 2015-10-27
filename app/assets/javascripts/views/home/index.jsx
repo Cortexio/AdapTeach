@@ -7,10 +7,10 @@ import SessionStore from '../../stores/sessionStore'
 export default {
   enter() {
     ReactDOM.render(
-      // <Fluxx stores={[SessionStore]}> { (session) => 
-        <HomeScreen session={ {firstname: "firstname", lastname: "lastname"} } />,
-      // }
-      // </Fluxx>, 
+      <Fluxx stores={[SessionStore]}>{ (session) =>
+        <HomeScreen session={session} />
+      }
+      </Fluxx>, 
       document.getElementById('content'))
   }
 }

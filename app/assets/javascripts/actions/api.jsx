@@ -22,5 +22,17 @@ export default {
 
   signup(method, params) {
     return ajaxWithFeedback(method, params, '/api/signup')
+  },
+
+  logout() {
+    return ajaxWithFeedback('GET', {}, '/api/logout')
+  },
+
+  session() {
+    return ajaxWithFeedback('GET', {}, '/api/session')
+  },
+
+  availableEmail(email) {
+    return ajaxWithFeedback('GET', {}, '/api/availability/email')
   }
 }

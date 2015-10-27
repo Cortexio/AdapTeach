@@ -11,6 +11,7 @@ GET     /api/session                 controllers.Application.session()
 POST    /api/signin                  controllers.Auth.signin()
 POST    /api/signup                  controllers.Auth.signup()
 GET     /api/logout                  controllers.Auth.logout()
+GET     /api/availability/email      controllers.Auth.availableEmail()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

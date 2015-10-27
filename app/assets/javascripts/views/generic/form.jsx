@@ -8,13 +8,13 @@ function signinInitialState() {
     {
       errors: [],
       formData: 
-        this.props.fields.map(function(field, index) {
+        this.props.fields.map((field, index) => {
           let obj = {}
           obj[field[FCST.FIELD.NAME]] = 
             {name: field[FCST.FIELD.NAME], element: field[FCST.FIELD.ELEMENT], mandatory: field[FCST.FIELD.MANDATORY], half: field[FCST.FIELD.HALF_SIZE],
-              style: field[FCST.FIELD.STYLE], type: field[FCST.FIELD.TYPE], placeholder: field[FCST.FIELD.PLACEHOLDER], value: null}
+              style: field[FCST.FIELD.STYLE], type: field[FCST.FIELD.TYPE], placeholder: field[FCST.FIELD.PLACEHOLDER], unique: field[FCST.FIELD.UNIQUE], value: null}
           return obj
-        }).reduce(function(acc, field) {
+        }).reduce((acc, field) => {
           return json.extend(acc, field)
         })
     }
@@ -32,10 +32,9 @@ var form = React.createClass({
   getInitialState: signinInitialState,
 
   render() {
-    let self = this
-    let fields = this.props.fields.map(function(field, index) {
+    let fields = this.props.fields.map((field, index) => {
       switch(field.element) {
-        case FCST.FIELDS.INPUT : return self.renderInput(self.state.formData[field[FCST.FIELD.NAME]])
+        case FCST.FIELDS.INPUT : return this.renderInput(this.state.formData[field[FCST.FIELD.NAME]])
         default : console.log(field)
       }
     })
@@ -66,38 +65,44 @@ var form = React.createClass({
   _validateForm(event) {
     event.preventDefault()
     this._resetErrors()
-    var self = this
     for(let fieldname in this.state.formData) {
       let elem = this.state.formData[fieldname]
       if(elem && elem.value != null) {
         switch(elem.type) {
           case FCST.FIELD_TYPES.PASSWORD: 
-            if(elem.value == null || elem.value.length < 6) self.state.errors.push({field: elem.name, error: "Enter a longer password"})
+            if(elem.value == null || elem.value.length < 6) this.state.errors.push({field: elem.name, error: "Enter a longer password"})
             break;
 
           case FCST.FIELD_TYPES.EMAIL: 
             var mailRegex = new RegExp('^.+\\@.+\\..+$')
-            if(!elem.value.match(mailRegex)) self.state.errors.push({field: elem.name, error: "Enter a valid email"})
+            if(!elem.value.match(mailRegex)) this.state.errors.push({field: elem.name, error: "Enter a valid email"})
             break;
 
           default: break;
         }
-      } else if(elem.mandatory) self.state.errors.push({field: elem.name, error: "the field " + elem.placeholder.toLowerCase() + " is mandatory"})
+      } else if(elem.mandatory) this.state.errors.push({field: elem.name, error: "the field " + elem.placeholder.toLowerCase() + " is mandatory"})
     }
 
-    if(self.state.errors.length === 0) {
+    if(this.state.errors.length === 0) {
       let res = {}
       for(let fieldname in this.state.formData) {
       let elem = this.state.formData[fieldname]
         if(elem.value) json.tupled(res, elem.name, elem.value)
       }
-      this.props.submitAction({params: res, method: self.props.method})
+      this.props.submitAction({params: res, method: this.props.method})
     }
     else this.setState(this.state)
   },
 
   _handleChange(fieldname, event) {
-    this.state.formData[fieldname].value = event.target.value || undefined
+    let elem = event.target
+    this.state.formData[fieldname].value = elem.value || undefined
+    if(elem.unique) {
+      elem.unique()
+        .then(response) {
+          this.setState(this.state.formData(response.data.errors))
+        }
+    }
   }
 })
 

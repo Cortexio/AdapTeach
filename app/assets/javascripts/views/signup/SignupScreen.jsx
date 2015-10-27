@@ -1,11 +1,16 @@
 import React from 'react'
 import json from '../../helpers/json'
-import { signup } from '../../actions/authActions'
+import { signup, checkAvailabilityEmail, checkAvailabilityUsername } from '../../actions/authActions'
 
 import Form from '../generic/form'
 import FCST from '../../constants/formConstants'
 
+function signupInitialState() {
+
 export default React.createClass({
+
+  getInitialState: signupInitialState,
+
   render() {
     return (
       <div className="signup">
@@ -40,6 +45,7 @@ export default React.createClass({
     json.tupled(email, FCST.FIELD.TYPE, 'email')
     json.tupled(email, FCST.FIELD.PLACEHOLDER, 'Email')
     json.tupled(email, FCST.FIELD.NAME, 'email')
+    json.tupled(username, FCST.FIELD.UNIQUE, checkAvailabilityEmail)
     json.tupled(email, FCST.FIELD.MANDATORY, true)
 
     let username = {}
@@ -47,6 +53,7 @@ export default React.createClass({
     json.tupled(username, FCST.FIELD.TYPE, 'text')
     json.tupled(username, FCST.FIELD.PLACEHOLDER, 'Username')
     json.tupled(username, FCST.FIELD.NAME, 'username')
+    json.tupled(username, FCST.FIELD.UNIQUE, checkAvailabilityUsername)
     json.tupled(username, FCST.FIELD.MANDATORY, true)
     
     let password = {}

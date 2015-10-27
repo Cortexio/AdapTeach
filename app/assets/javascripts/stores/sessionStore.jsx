@@ -2,19 +2,12 @@ import { Store } from 'fluxx'
 
 import {authDispatcher} from '../actions/authActions'
 
-export default Store(on => {
+export default Store({
   // The store's private state; The store could have many of these.
-  let session = {}
+  session : {},
 
-  // When the store receives the init Action,
-  // initialize its initial state with the action's payload.
-  on(authDispatcher.SET_SESSION, data => {
-    session = data
-  })
-
-  on(authDispatcher.REMOVE_SESSION, _ => session = {})
-
-  return {
-    session: () => session
+  handlers: {
+    [authDispatcher.SET_SESSION] : (session, data) => session = data,
+    [authDispatcher.REMOVE_SESSION]: (session, _) => session = {}
   }
 })

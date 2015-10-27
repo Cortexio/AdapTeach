@@ -10,6 +10,8 @@ import home from './views/home'
 import signin from './views/signin'
 import signup from './views/signup'
 
+import { syncSession } from './actions/authActions'
+
 
 router
   .addState('home', State('', home))
@@ -19,4 +21,5 @@ router
 
 window.init = function () {
   router.init()
+  syncSession()
 }
