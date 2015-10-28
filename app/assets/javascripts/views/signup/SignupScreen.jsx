@@ -42,7 +42,7 @@ export default React.createClass({
     json.tupled(email, FCST.FIELD.TYPE, 'email')
     json.tupled(email, FCST.FIELD.PLACEHOLDER, 'Email')
     json.tupled(email, FCST.FIELD.NAME, 'email')
-    json.tupled(username, FCST.FIELD.UNIQUE, checkAvailabilityEmail)
+    json.tupled(email, FCST.FIELD.ONCHANGE, {action : checkAvailabilityEmail, success: this._fieldInSuccess, error: this._fieldInError})
     json.tupled(email, FCST.FIELD.MANDATORY, true)
 
     let username = {}
@@ -50,7 +50,7 @@ export default React.createClass({
     json.tupled(username, FCST.FIELD.TYPE, 'text')
     json.tupled(username, FCST.FIELD.PLACEHOLDER, 'Username')
     json.tupled(username, FCST.FIELD.NAME, 'username')
-    json.tupled(username, FCST.FIELD.UNIQUE, checkAvailabilityUsername)
+    json.tupled(username, FCST.FIELD.ONCHANGE, {action : checkAvailabilityUsername, success: this._fieldInSuccess, error: this._fieldInError})
     json.tupled(username, FCST.FIELD.MANDATORY, true)
     
     let password = {}
@@ -67,5 +67,20 @@ export default React.createClass({
 
   _handleSignup(formData) {
     signup(formData)
+  },
+
+  _fieldInSuccess(elem) {
+    this.fieldClassReset(elem)
+    elem.classList.add("success");
+  },
+
+  _fieldInError(elem) {
+    this.fieldClassReset(elem)
+    elem.classList.add("error")
+  },
+
+  fieldClassReset(elem) {
+    elem.classList.remove("success")
+    elem.classList.remove("error")
   }
 })

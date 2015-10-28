@@ -2,7 +2,7 @@ form .feedback {
   display: block;
   margin-bottom: 1.6rem;
   width: 100%;
-  color: red;
+  color: #D60000;
   font-size: 1.2rem;
   text-align: center;
   height: 1.2rem; }
@@ -13,10 +13,16 @@ form input {
   width: 100%;
   border: none;
   margin-bottom: 1.6rem; }
+  form input:focus {
+    outline: none; }
   form input.half {
     width: calc(50% - 0.8rem); }
     form input.half.left {
       margin-right: 1.6rem; }
+  form input.error {
+    border: 1px solid #D60000; }
+  form input.success {
+    border: 1px solid #00AB36; }
   form input[type=submit] {
     border: none;
     padding: 1.2rem;

@@ -11,8 +11,16 @@ function signinInitialState() {
         this.props.fields.map((field, index) => {
           let obj = {}
           obj[field[FCST.FIELD.NAME]] = 
-            {name: field[FCST.FIELD.NAME], element: field[FCST.FIELD.ELEMENT], mandatory: field[FCST.FIELD.MANDATORY], half: field[FCST.FIELD.HALF_SIZE],
-              style: field[FCST.FIELD.STYLE], type: field[FCST.FIELD.TYPE], placeholder: field[FCST.FIELD.PLACEHOLDER], unique: field[FCST.FIELD.UNIQUE], value: null}
+            {
+              name: field[FCST.FIELD.NAME], 
+              element: field[FCST.FIELD.ELEMENT], 
+              mandatory: field[FCST.FIELD.MANDATORY], 
+              half: field[FCST.FIELD.HALF_SIZE],
+              style: field[FCST.FIELD.STYLE] || '', 
+              type: field[FCST.FIELD.TYPE], 
+              placeholder: field[FCST.FIELD.PLACEHOLDER],
+              onchange: field[FCST.FIELD.ONCHANGE], value: null
+            }
           return obj
         }).reduce((acc, field) => {
           return json.extend(acc, field)
@@ -53,7 +61,7 @@ var form = React.createClass({
       <input key={field.name} type={field.type} 
         className={field.half ? 'half ' + field.half : '' + field.style || ''}
         placeholder={field.placeholder} name={field.name} 
-        onChange={this._handleChange.bind(null, field.name)} />
+        onChange={this._handleChange.bind(null, field)} />
     )
   },
 
@@ -94,9 +102,23 @@ var form = React.createClass({
     else this.setState(this.state)
   },
 
-  _handleChange(fieldname, event) {
+  _handleChange(field, event) {
+    this.state.formData[field.name].value = field.value || undefined
     let elem = event.target
-    this.state.formData[fieldname].value = elem.value || undefined
+    if(elem.value && elem.value.length > 0 && field.onchange) {
+      field.onchange.action(event.target.value)
+      .done((data, textStatus, jqXHR) => {
+        field.onchange.success(elem)
+        this._resetErrors()
+      })
+      .fail((jqXHR, textStatus, errorThrown) => {
+        field.onchange.error(elem)
+        this.state.errors.push({field: elem.name, error: elem.placeholder.toLowerCase() + " is not available"})
+        this.setState(this.state)
+      })
+    } else {
+      this._resetErrors()
+    }
   }
 })
 

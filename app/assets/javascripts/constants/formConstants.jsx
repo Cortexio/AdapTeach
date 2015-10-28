@@ -15,7 +15,7 @@ export default {
       LEFT: "left",
       RIGHT: "right"
     },
-    UNIQUE: "unique"
+    ONCHANGE: "onchange"
   },
 
   FIELD_TYPES : {

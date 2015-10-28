@@ -87,7 +87,25 @@ class Auth extends CommonController {
     Ok(views.html.index()).withNewSession
   }
 
-  def availableEmail() =  Action.async { implicit req =>
-    Future.successful(Ok)
+  def availableEmail(email: String) =  Action.async { implicit req =>
+    for(
+      maybeUser <- UserRepo.checkEmailAvailable(email)
+    ) yield (
+      maybeUser match {
+        case Some(user) => Conflict
+        case None => Ok
+      }
+    )
+  }
+
+  def availableUsername(username: String) =  Action.async { implicit req =>
+    for(
+      maybeUser <- UserRepo.checkUsernameAvailable(username)
+    ) yield (
+      maybeUser match {
+        case Some(user) => Conflict
+        case None => Ok
+      }
+    )
   }
 }

@@ -25,6 +25,19 @@ object UserRepo {
     collection.find(query).one[User]
   }
 
+  def checkUsernameAvailable(username: String) : Future[Option[User]] = {
+    println("username " + username)
+
+    val query = BSONDocument("username" -> username)
+    collection.find(query).one[User]
+  }
+
+  def checkEmailAvailable(email: String) : Future[Option[User]] = {
+    println("email " + email)
+    val query = BSONDocument("email" -> email)
+    collection.find(query).one[User]
+  }
+
   def insert(user: User) : Unit = {
     collection.insert(user).onComplete {
       case Failure(e) => throw e

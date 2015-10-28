@@ -1,18 +1,10 @@
-import Axios from 'axios';
-
 function ajaxWithFeedback(method, params, url) {
-  return Axios({
+  return $.ajax({
     method: method,
     url: url,
     data: params
   })
-  .catch(function (response) {
-    if (response instanceof Error) {
-      console.log(response.message)
-    } else {
-      console.log(response);
-    }
-  })
+  .fail((jqXHR, textStatus, errorThrown) => console.log(textStatus))
 }
 
 export default {
@@ -33,6 +25,10 @@ export default {
   },
 
   availableEmail(email) {
-    return ajaxWithFeedback('GET', {}, '/api/availability/email')
+    return ajaxWithFeedback('GET', {email: email}, '/api/availability/email')
+  },
+
+    availableUsername(username) {
+    return ajaxWithFeedback('GET', {username: username}, '/api/availability/username')
   }
 }

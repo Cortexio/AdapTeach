@@ -6,7 +6,7 @@ form
     display: block
     margin-bottom: 1.6rem
     width: 100%
-    color: red
+    color: $red
     font-size: 1.2rem
     text-align: center
     height: 1.2rem
@@ -18,10 +18,19 @@ form
     border: none
     margin-bottom: 1.6rem
 
+    &:focus
+      outline: none
+
     &.half
       width: calc(50% - 0.8rem)
       &.left
         margin-right: 1.6rem
+
+    &.error
+      border: 1px solid $red
+    
+    &.success
+      border: 1px solid $green
 
     &[type=submit]
       border: none
