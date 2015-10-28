@@ -87,5 +87,7 @@ class Auth extends CommonController {
     Ok(views.html.index()).withNewSession
   }
 
-  def availableEmail()
+  def availableEmail() =  Action.async { implicit req =>
+    Future.successful(Ok)
+  }
 }

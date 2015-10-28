@@ -32,7 +32,6 @@ export function logout() {
     if (!(response instanceof Error)) {
       authDispatcher.REMOVE_SESSION()
       router.transitionTo('home')
-      window.location.reload()
     }
   })
 }

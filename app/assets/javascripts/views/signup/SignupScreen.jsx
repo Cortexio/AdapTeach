@@ -5,11 +5,8 @@ import { signup, checkAvailabilityEmail, checkAvailabilityUsername } from '../..
 import Form from '../generic/form'
 import FCST from '../../constants/formConstants'
 
-function signupInitialState() {
 
 export default React.createClass({
-
-  getInitialState: signupInitialState,
 
   render() {
     return (

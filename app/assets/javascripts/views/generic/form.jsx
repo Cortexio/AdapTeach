@@ -97,12 +97,6 @@ var form = React.createClass({
   _handleChange(fieldname, event) {
     let elem = event.target
     this.state.formData[fieldname].value = elem.value || undefined
-    if(elem.unique) {
-      elem.unique()
-        .then(response) {
-          this.setState(this.state.formData(response.data.errors))
-        }
-    }
   }
 })
 

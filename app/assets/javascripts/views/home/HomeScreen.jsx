@@ -6,20 +6,22 @@ import store from '../../stores/sessionStore'
 import HeadMenu from '../layout/HeadMenu'
 
 
-var home = React.createClass ({
+export default React.createClass ({
 
   propTypes: {
     session: React.PropTypes.object
   },
 
+  getDefaultProps() {
+    return { session: {} }
+  },
+
   render() {
     return (
       <div>
-        Hello {this.props.session ? this.props.session.firstname + ' ' + this.props.session.lastname : 'Guest'}
-        <HeadMenu></HeadMenu>
+        Hello {this.props.session.username ? this.props.session.firstname + ' ' + this.props.session.lastname : 'Guest'}
+        <HeadMenu session={this.props.session} ></HeadMenu>
       </div>
     )
   }
-});
-
-export default home
+})
