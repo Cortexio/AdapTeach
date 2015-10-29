@@ -42,17 +42,19 @@ export default React.createClass({
     json.tupled(email, FCST.FIELD.TYPE, 'email')
     json.tupled(email, FCST.FIELD.PLACEHOLDER, 'Email')
     json.tupled(email, FCST.FIELD.NAME, 'email')
-    json.tupled(email, FCST.FIELD.ONCHANGE, {action : checkAvailabilityEmail, success: this._fieldInSuccess, error: this._fieldInError})
+    json.tupled(email, FCST.FIELD.ONCHANGE, {action : checkAvailabilityEmail, error: this._fieldInError, reset: this._fieldReset})
     json.tupled(email, FCST.FIELD.MANDATORY, true)
+    json.tupled(email, FCST.FIELD.AUTOCOMPLETE, false)
 
     let username = {}
     json.tupled(username, FCST.FIELD.ELEMENT, 'input')
     json.tupled(username, FCST.FIELD.TYPE, 'text')
     json.tupled(username, FCST.FIELD.PLACEHOLDER, 'Username')
     json.tupled(username, FCST.FIELD.NAME, 'username')
-    json.tupled(username, FCST.FIELD.ONCHANGE, {action : checkAvailabilityUsername, success: this._fieldInSuccess, error: this._fieldInError})
+    json.tupled(username, FCST.FIELD.ONCHANGE, {action : checkAvailabilityUsername, success: this._fieldInSuccess, error: this._fieldInError, reset: this._fieldReset})
     json.tupled(username, FCST.FIELD.MANDATORY, true)
-    
+    json.tupled(username, FCST.FIELD.AUTOCOMPLETE, false)
+
     let password = {}
     json.tupled(password, FCST.FIELD.ELEMENT, 'input')
     json.tupled(password, FCST.FIELD.TYPE, 'password')
@@ -70,16 +72,16 @@ export default React.createClass({
   },
 
   _fieldInSuccess(elem) {
-    this.fieldClassReset(elem)
+    this._fieldReset(elem)
     elem.classList.add("success");
   },
 
   _fieldInError(elem) {
-    this.fieldClassReset(elem)
+    this._fieldReset(elem)
     elem.classList.add("error")
   },
 
-  fieldClassReset(elem) {
+  _fieldReset(elem) {
     elem.classList.remove("success")
     elem.classList.remove("error")
   }

@@ -77,8 +77,28 @@ class Auth extends CommonController {
         val bsonId = BSONObjectID.generate
         val hash = BCrypt.hashpw(password, BCrypt.gensalt())
         val user = User(bsonId, firstname, lastname, email, username, hash)
-        UserRepo.insert(user)
-        Future.successful(Ok(Json.obj("session" -> user)).withSession("user" -> Json.stringify(User.toJson(user))))
+
+        for(
+          maybeAvailableEmailUser <- UserRepo.checkEmailAvailable(email);
+          maybeAvailableUsernameUser <- UserRepo.checkUsernameAvailable(username)
+        ) yield (
+          maybeAvailableUsernameUser match {
+            case Some(userUsername) =>
+              maybeAvailableEmailUser match {
+                case Some(userEmail) =>
+                  UserRepo.insert(user)
+                  Ok(Json.obj("session" -> user)).withSession("user" -> Json.stringify(User.toJson(user)))
+
+                case None =>
+                  val emailNotAvailableMessage = email + " is not available"
+                  Conflict(Json.obj("errors" -> JsArray(Seq(Json.obj("email" -> emailNotAvailableMessage)))))
+              }
+
+            case None =>
+              val usernameNotAvailableMessage = username + " is not available"
+              Conflict(Json.obj("errors" -> JsArray(Seq(Json.obj("username" -> usernameNotAvailableMessage)))))
+          }
+        )
       }
     )
   }
@@ -87,24 +107,56 @@ class Auth extends CommonController {
     Ok(views.html.index()).withNewSession
   }
 
-  def availableEmail(email: String) =  Action.async { implicit req =>
-    for(
-      maybeUser <- UserRepo.checkEmailAvailable(email)
-    ) yield (
-      maybeUser match {
-        case Some(user) => Conflict
-        case None => Ok
+  def emailForm = Form (
+    "email" -> text
+  )
+
+  def availableEmail() =  Action.async { implicit req =>
+    emailForm.bindFromRequest.fold(
+      {
+        case errors =>
+          Future.successful(BadRequest(Json.obj("errors" -> errors.errorsAsJson)))
+      },
+      {
+        case(email) =>
+          for(
+            maybeUser <- UserRepo.checkEmailAvailable(email)
+          ) yield (
+            maybeUser match {
+              case Some(user) => 
+                val notAvailableMessage = email + " is not available"
+                Conflict(Json.obj("errors" -> JsArray(Seq(Json.obj("email" -> notAvailableMessage)))))
+              
+              case None => Ok
+            }
+          )
       }
     )
   }
 
-  def availableUsername(username: String) =  Action.async { implicit req =>
-    for(
-      maybeUser <- UserRepo.checkUsernameAvailable(username)
-    ) yield (
-      maybeUser match {
-        case Some(user) => Conflict
-        case None => Ok
+  def usernameForm = Form (
+    "username" -> text.verifying("Enter your username", !_.trim.isEmpty)
+  )
+
+  def availableUsername() =  Action.async { implicit req =>
+    usernameForm.bindFromRequest.fold(
+      {
+        case errors =>
+          Future.successful(BadRequest(Json.obj("errors" -> errors.errorsAsJson)))
+      },
+      {
+        case(username) =>
+          for(
+            maybeUser <- UserRepo.checkUsernameAvailable(username)
+          ) yield (
+            maybeUser match {
+              case Some(user) => 
+                val notAvailableMessage = username + " is not available"
+                Conflict(Json.obj("errors" -> JsArray(Seq(Json.obj("username" -> notAvailableMessage)))))
+              
+              case None => Ok
+            }
+          )
       }
     )
   }

@@ -25,7 +25,11 @@ form input {
     border: 1px solid #00AB36; }
   form input[type=submit] {
     border: none;
+    cursor: pointer;
     padding: 1.2rem;
     text-transform: uppercase;
     color: #FFFFFF;
     background-color: #f5b45d; }
+    form input[type=submit]:read-only {
+      color: #FFC578;
+      cursor: default; }

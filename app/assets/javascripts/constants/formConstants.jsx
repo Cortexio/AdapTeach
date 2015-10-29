@@ -9,6 +9,7 @@ export default {
     PLACEHOLDER: "placeholder",
     NAME: "name",
     MANDATORY: "mandatory",
+    AUTOCOMPLETE: "autocomplete",
     STYLE: "style",
     HALF_SIZE: "half",
     POSITION: {

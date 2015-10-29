@@ -34,7 +34,12 @@ form
 
     &[type=submit]
       border: none
+      cursor: pointer
       padding: 1.2rem
       text-transform: uppercase
       color: $white
       background-color: $orange
+      
+      &:read-only
+        color: $light-orange
+        cursor: default

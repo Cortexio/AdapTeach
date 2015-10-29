@@ -3,7 +3,17 @@ import json from '../../helpers/json'
 
 import FCST from '../../constants/formConstants'
 
-function signinInitialState() {
+/**
+* method : ajax call method
+* fields : field list to put in the form
+* submitAction: function to call when submitting the form
+* submitValue: Submit button value
+* onChange function in each field: success, error, reset (to call eventually if you wanna revert effects of success or error)
+*
+* return json object with method and params exemple : { method : "POST", params : { tata: "tata", toto: "toto" } }
+*/
+
+function formInitialState() {
   return (
     {
       errors: [],
@@ -14,7 +24,8 @@ function signinInitialState() {
             {
               name: field[FCST.FIELD.NAME], 
               element: field[FCST.FIELD.ELEMENT], 
-              mandatory: field[FCST.FIELD.MANDATORY], 
+              mandatory: field[FCST.FIELD.MANDATORY],
+              autocomplete: field[FCST.FIELD.AUTOCOMPLETE] !== undefined ? field[FCST.FIELD.AUTOCOMPLETE] ? "on" : "off" : "on",
               half: field[FCST.FIELD.HALF_SIZE],
               style: field[FCST.FIELD.STYLE] || '', 
               type: field[FCST.FIELD.TYPE], 
@@ -29,7 +40,7 @@ function signinInitialState() {
   )
 }
 
-var form = React.createClass({
+export default React.createClass({
   propTypes: {
     method: React.PropTypes.string.isRequired,
     fields: React.PropTypes.array.isRequired,
@@ -37,7 +48,7 @@ var form = React.createClass({
     submitValue: React.PropTypes.string.isRequired
   },
 
-  getInitialState: signinInitialState,
+  getInitialState: formInitialState,
 
   render() {
     let fields = this.props.fields.map((field, index) => {
@@ -50,18 +61,18 @@ var form = React.createClass({
     return (
       <form method={this.props.method} onSubmit={this._validateForm}>
         {fields}
-        <span className="feedback">{this.state.errors.length > 0 ? this.state.errors[0].error : ''}</span>
-        <input type="submit" value={this.props.submitValue} />
+        <span className="feedback">{this.state.errors.length > 0 ? json.values(this.state.errors[0])[0] : ''}</span>
+        <input type="submit" value={this.props.submitValue} readOnly={this.state.errors.length > 0} />
       </form>
     )
   },
 
   renderInput(field) {
     return (
-      <input key={field.name} type={field.type} 
+      <input key={field.name} type={field.type} autoComplete={field.autocomplete} 
         className={field.half ? 'half ' + field.half : '' + field.style || ''}
         placeholder={field.placeholder} name={field.name} 
-        onChange={this._handleChange.bind(null, field)} />
+        onBlur={this._handleBlur.bind(null, field)} />
     )
   },
 
@@ -83,12 +94,12 @@ var form = React.createClass({
 
           case FCST.FIELD_TYPES.EMAIL: 
             var mailRegex = new RegExp('^.+\\@.+\\..+$')
-            if(!elem.value.match(mailRegex)) this.state.errors.push({field: elem.name, error: "Enter a valid email"})
+            if(!elem.value.match(mailRegex)) this.state.errors.push({error: "Enter a valid email"})
             break;
 
           default: break;
         }
-      } else if(elem.mandatory) this.state.errors.push({field: elem.name, error: "the field " + elem.placeholder.toLowerCase() + " is mandatory"})
+      } else if(elem.mandatory) this.state.errors.push({error: "the field " + elem.placeholder.toLowerCase() + " is mandatory"})
     }
 
     if(this.state.errors.length === 0) {
@@ -102,25 +113,28 @@ var form = React.createClass({
     else this.setState(this.state)
   },
 
-  _handleChange(field, event) {
-    this.state.formData[field.name].value = field.value || undefined
+  _handleBlur(field, event) {
     let elem = event.target
-    if(elem.value && elem.value.length > 0 && field.onchange) {
+
+    this.state.formData[field.name].value = elem.value || undefined
+    if(field.onchange) {
+      let self = this
       field.onchange.action(event.target.value)
       .done((data, textStatus, jqXHR) => {
-        field.onchange.success(elem)
-        this._resetErrors()
+        self._resetErrors()
+        if(field.onchange.reset) field.onchange.reset(elem)
+        if(field.onchange.success) field.onchange.success(elem)
       })
       .fail((jqXHR, textStatus, errorThrown) => {
-        field.onchange.error(elem)
-        this.state.errors.push({field: elem.name, error: elem.placeholder.toLowerCase() + " is not available"})
-        this.setState(this.state)
+        self._resetErrors()
+        if(field.onchange.reset) field.onchange.reset(elem)
+        if(field.onchange.error) field.onchange.error(elem)
+        self.state.errors = JSON.parse(jqXHR.responseText).errors
+        self.setState(self.state)
       })
     } else {
       this._resetErrors()
     }
   }
 })
-
-export default form
 

@@ -25,10 +25,10 @@ export default {
   },
 
   availableEmail(email) {
-    return ajaxWithFeedback('GET', {email: email}, '/api/availability/email')
+    return ajaxWithFeedback('POST', {email: email}, '/api/availability/email')
   },
 
     availableUsername(username) {
-    return ajaxWithFeedback('GET', {username: username}, '/api/availability/username')
+    return ajaxWithFeedback('POST', {username: username}, '/api/availability/username')
   }
 }
