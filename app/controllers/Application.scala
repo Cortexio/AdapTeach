@@ -4,14 +4,18 @@ import play.api._
 import play.api.mvc._
 import play.api.libs.json._
 
-class Application extends Controller {
+import scala.concurrent._
+import scala.concurrent.ExecutionContext.Implicits.global
+
+import models.{User}
+
+class Application extends Controller{
 
   def index(url: String) = Action {
-    Ok(views.html.index("Hello World!"))
+    Ok(views.html.index())
   }
 
-  def test = Action { implicit req =>
-    Ok
+  def session = WithSession { request =>
+    Ok(User.toJson(request.user))
   }
-
 }

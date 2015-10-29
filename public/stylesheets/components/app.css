@@ -1,4 +1,11 @@
-body {
+@import url(https://fonts.googleapis.com/css?family=Lato|Montserrat);
+body * {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  font-family: 'Lato', sans-serif;
+  font-size: 16px; }
+
+#content {
   background-color: #EFEFEF;
   color: #4e4e4e;
-  height: 100vh; }
+  min-height: 100vh; }
