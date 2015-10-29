@@ -16,7 +16,8 @@ export default {
       LEFT: "left",
       RIGHT: "right"
     },
-    ONCHANGE: "onchange"
+    ONCHANGE: "onchange",
+    ONBLUR: "onblur"
   },
 
   FIELD_TYPES : {

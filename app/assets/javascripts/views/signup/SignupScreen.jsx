@@ -42,7 +42,7 @@ export default React.createClass({
     json.tupled(email, FCST.FIELD.TYPE, 'email')
     json.tupled(email, FCST.FIELD.PLACEHOLDER, 'Email')
     json.tupled(email, FCST.FIELD.NAME, 'email')
-    json.tupled(email, FCST.FIELD.ONCHANGE, {action : checkAvailabilityEmail, error: this._fieldInError, reset: this._fieldReset})
+    json.tupled(email, FCST.FIELD.ONBLUR, {action : checkAvailabilityEmail, error: this._fieldInError, reset: this._fieldReset})
     json.tupled(email, FCST.FIELD.MANDATORY, true)
     json.tupled(email, FCST.FIELD.AUTOCOMPLETE, false)
 
@@ -68,7 +68,7 @@ export default React.createClass({
   },
 
   _handleSignup(formData) {
-    signup(formData)
+    return signup(formData)
   },
 
   _fieldInSuccess(elem) {

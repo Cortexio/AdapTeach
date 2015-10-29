@@ -84,19 +84,20 @@ class Auth extends CommonController {
         ) yield (
           maybeAvailableUsernameUser match {
             case Some(userUsername) =>
-              maybeAvailableEmailUser match {
-                case Some(userEmail) =>
-                  UserRepo.insert(user)
-                  Ok(Json.obj("session" -> user)).withSession("user" -> Json.stringify(User.toJson(user)))
-
-                case None =>
-                  val emailNotAvailableMessage = email + " is not available"
-                  Conflict(Json.obj("errors" -> JsArray(Seq(Json.obj("email" -> emailNotAvailableMessage)))))
-              }
+              val usernameNotAvailableMessage = username + " is not available"
+              Conflict(Json.obj("errors" -> Json.obj("username" -> usernameNotAvailableMessage)))
 
             case None =>
-              val usernameNotAvailableMessage = username + " is not available"
-              Conflict(Json.obj("errors" -> JsArray(Seq(Json.obj("username" -> usernameNotAvailableMessage)))))
+              
+              maybeAvailableEmailUser match {
+                case Some(userEmail) =>
+                  val emailNotAvailableMessage = email + " is not available"
+                  Conflict(Json.obj("errors" -> Json.obj("email" -> emailNotAvailableMessage)))
+
+                case None =>
+                  UserRepo.insert(user)
+                  Ok(Json.obj("session" -> user)).withSession("user" -> Json.stringify(User.toJson(user)))
+              }
           }
         )
       }
@@ -125,7 +126,7 @@ class Auth extends CommonController {
             maybeUser match {
               case Some(user) => 
                 val notAvailableMessage = email + " is not available"
-                Conflict(Json.obj("errors" -> JsArray(Seq(Json.obj("email" -> notAvailableMessage)))))
+                Conflict(Json.obj("errors" -> Json.obj("email" -> notAvailableMessage)))
               
               case None => Ok
             }
@@ -152,7 +153,7 @@ class Auth extends CommonController {
             maybeUser match {
               case Some(user) => 
                 val notAvailableMessage = username + " is not available"
-                Conflict(Json.obj("errors" -> JsArray(Seq(Json.obj("username" -> notAvailableMessage)))))
+                Conflict(Json.obj("errors" -> Json.obj("username" -> notAvailableMessage)))
               
               case None => Ok
             }

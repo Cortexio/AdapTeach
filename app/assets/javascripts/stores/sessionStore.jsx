@@ -8,6 +8,6 @@ export default Store({
 
   handlers: {
     [authDispatcher.SET_SESSION] : (session, data) => session = data,
-    [authDispatcher.REMOVE_SESSION]: (session, _) => session = {}
+    [authDispatcher.REMOVE_SESSION]: (session) => session = {}
   }
 })

@@ -1,24 +1,37 @@
 form .feedback {
   display: block;
-  margin-bottom: 1.6rem;
   width: 100%;
   color: #D60000;
-  font-size: 1.2rem;
-  text-align: center;
-  height: 1.2rem; }
+  height: 1.2rem;
+  font-size: 0.8rem;
+  text-align: left;
+  padding: 1rem;
+  height: 2.8rem; }
+  form .feedback span {
+    width: inherit;
+    color: inherit;
+    height: inherit;
+    font-size: inherit;
+    text-align: inherit;
+    padding: 0;
+    height: inherit; }
+
+form .input-wrapper {
+  display: inline-block;
+  vertical-align: top;
+  width: 100%; }
+  form .input-wrapper.half {
+    width: calc(50% - 1.4rem); }
+  form .input-wrapper.left {
+    margin-right: 2.8rem; }
 
 form input {
   font-size: 1.2rem;
   padding: 1rem 1rem;
   width: 100%;
-  border: none;
-  margin-bottom: 1.6rem; }
+  border: none; }
   form input:focus {
     outline: none; }
-  form input.half {
-    width: calc(50% - 0.8rem); }
-    form input.half.left {
-      margin-right: 1.6rem; }
   form input.error {
     border: 1px solid #D60000; }
   form input.success {
@@ -29,7 +42,6 @@ form input {
     padding: 1.2rem;
     text-transform: uppercase;
     color: #FFFFFF;
-    background-color: #f5b45d; }
-    form input[type=submit]:read-only {
-      color: #FFC578;
-      cursor: default; }
+    background-color: #FFBC63; }
+    form input[type=submit]:active {
+      background-color: #FDB351; }

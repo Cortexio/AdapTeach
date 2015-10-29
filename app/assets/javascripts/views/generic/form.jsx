@@ -13,10 +13,23 @@ import FCST from '../../constants/formConstants'
 * return json object with method and params exemple : { method : "POST", params : { tata: "tata", toto: "toto" } }
 */
 
+const SERVER_ERROR = "server"
+const CLIENT_ERROR = "client"
+
+function initErrors(fields) {
+  return this.props.fields.map((field, index) => {
+    let obj = {}
+    obj[field[FCST.FIELD.NAME]] = []
+    return obj
+  }).reduce((acc, field) => {
+    return json.extend(acc, field)
+  })
+}
+
 function formInitialState() {
   return (
     {
-      errors: [],
+      errors: initErrors.bind(this)(),
       formData: 
         this.props.fields.map((field, index) => {
           let obj = {}
@@ -27,10 +40,12 @@ function formInitialState() {
               mandatory: field[FCST.FIELD.MANDATORY],
               autocomplete: field[FCST.FIELD.AUTOCOMPLETE] !== undefined ? field[FCST.FIELD.AUTOCOMPLETE] ? "on" : "off" : "on",
               half: field[FCST.FIELD.HALF_SIZE],
-              style: field[FCST.FIELD.STYLE] || '', 
-              type: field[FCST.FIELD.TYPE], 
+              style: field[FCST.FIELD.STYLE] || '',
+              type: field[FCST.FIELD.TYPE],
               placeholder: field[FCST.FIELD.PLACEHOLDER],
-              onchange: field[FCST.FIELD.ONCHANGE], value: null
+              onchange: field[FCST.FIELD.ONCHANGE],
+              onblur: field[FCST.FIELD.ONBLUR],
+              value: null
             }
           return obj
         }).reduce((acc, field) => {
@@ -59,81 +74,122 @@ export default React.createClass({
     })
 
     return (
-      <form method={this.props.method} onSubmit={this._validateForm}>
+      <form method={this.props.method} onSubmit={this._handleSubmit}>
         {fields}
-        <span className="feedback">{this.state.errors.length > 0 ? json.values(this.state.errors[0])[0] : ''}</span>
-        <input type="submit" value={this.props.submitValue} readOnly={this.state.errors.length > 0} />
+        <input type="submit" value={this.props.submitValue} />
       </form>
     )
   },
 
   renderInput(field) {
+    let fieldErrors = this.state.errors[field.name]
+
     return (
-      <input key={field.name} type={field.type} autoComplete={field.autocomplete} 
-        className={field.half ? 'half ' + field.half : '' + field.style || ''}
-        placeholder={field.placeholder} name={field.name} 
-        onBlur={this._handleBlur.bind(null, field)} />
+      <div key={field.name} className={'input-wrapper' + (field.half ? ' half ' + field.half : '')} >
+        <input type={field.type} autoComplete={field.autocomplete} 
+          className={field.style || ''}
+          placeholder={field.placeholder} name={field.name} 
+          onBlur={this._handleBlur.bind(null, field)}
+          onChange={this._handleChange.bind(null, field)} />
+        <p id={field.name} className="feedback">{fieldErrors.length > 0 ? fieldErrors[0].value : ''}</p>
+      </div>
     )
   },
 
-  _resetErrors() {
-    this.state.errors = []
+  _resetClientErrors(fieldName) {
+    this.state.errors[fieldName] = this.state.errors[fieldName].filter(e => e.type !== CLIENT_ERROR)
     this.setState(this.state)
   },
 
-  _validateForm(event) {
-    event.preventDefault()
-    this._resetErrors()
-    for(let fieldname in this.state.formData) {
+  _resetServerErrors(fieldName) {
+    this.state.errors[fieldName] = this.state.errors[fieldName].filter(e => e.type !== SERVER_ERROR)
+    this.setState(this.state)
+  },
+
+  _validateForm(fields) {
+    for(let fieldname in fields) {
+      this._resetClientErrors(fieldname)
       let elem = this.state.formData[fieldname]
       if(elem && elem.value != null) {
         switch(elem.type) {
           case FCST.FIELD_TYPES.PASSWORD: 
-            if(elem.value == null || elem.value.length < 6) this.state.errors.push({field: elem.name, error: "Enter a longer password"})
+            if(elem.value == null || elem.value.length < 6) this.state.errors["password"].push({type: CLIENT_ERROR, value: "Enter a longer password"})
             break;
 
           case FCST.FIELD_TYPES.EMAIL: 
             var mailRegex = new RegExp('^.+\\@.+\\..+$')
-            if(!elem.value.match(mailRegex)) this.state.errors.push({error: "Enter a valid email"})
+            if(!elem.value.match(mailRegex)) this.state.errors["email"].push({type: CLIENT_ERROR, value: "Enter a valid email"})
             break;
 
           default: break;
         }
-      } else if(elem.mandatory) this.state.errors.push({error: "the field " + elem.placeholder.toLowerCase() + " is mandatory"})
+      } else if(elem.mandatory) this.state.errors[fieldname].push({type: CLIENT_ERROR, value: "Enter your " + elem.placeholder.toLowerCase()})
     }
-
-    if(this.state.errors.length === 0) {
-      let res = {}
-      for(let fieldname in this.state.formData) {
-      let elem = this.state.formData[fieldname]
-        if(elem.value) json.tupled(res, elem.name, elem.value)
-      }
-      this.props.submitAction({params: res, method: this.props.method})
-    }
-    else this.setState(this.state)
+    this.setState(this.state)
   },
 
   _handleBlur(field, event) {
+    //internal
     let elem = event.target
+    this._validateForm(json.tupled({}, field.name, this.state.formData[field.name]))
+    //external
+    if(field.onblur) this._handleActions(field, elem.value, this, elem, FCST.FIELD.ONBLUR)
+  },
 
+  _handleChange(field, event) {
+    //internal
+    let elem = event.target
     this.state.formData[field.name].value = elem.value || undefined
-    if(field.onchange) {
-      let self = this
-      field.onchange.action(event.target.value)
-      .done((data, textStatus, jqXHR) => {
-        self._resetErrors()
-        if(field.onchange.reset) field.onchange.reset(elem)
-        if(field.onchange.success) field.onchange.success(elem)
-      })
-      .fail((jqXHR, textStatus, errorThrown) => {
-        self._resetErrors()
-        if(field.onchange.reset) field.onchange.reset(elem)
-        if(field.onchange.error) field.onchange.error(elem)
-        self.state.errors = JSON.parse(jqXHR.responseText).errors
-        self.setState(self.state)
-      })
-    } else {
-      this._resetErrors()
+    //external
+    if(field.onchange) this._handleActions(field, elem.value, this, elem, FCST.FIELD.ONCHANGE)
+  },
+
+  _handleActions(field, value, ctx, domNode, actionType) {
+    field[actionType].action(value)
+
+    .done((data, textStatus, jqXHR) => {
+      ctx._resetServerErrors(field.name)
+
+      if(field[actionType].reset) field[actionType].reset(domNode)
+      if(field[actionType].success) field[actionType].success(domNode)
+    })
+
+    .fail((jqXHR, textStatus, errorThrown) => {
+      ctx._resetServerErrors(field.name)
+      if(field[actionType].reset) field[actionType].reset(domNode)
+      if(field[actionType].error) field[actionType].error(domNode)
+      let serverErrors = jqXHR.responseJSON.errors
+      //set server errors on the state
+      ctx._resetClientErrors(field.name) // to allow errors from server to be render instead of low priority client errors
+      for(let key in serverErrors) ctx.state.errors[key].push({type: SERVER_ERROR, value: serverErrors[key]})
+      ctx.setState(ctx.state)
+    })
+  },
+
+  _isErrorsStateEmpty() {
+    return json.values(this.state.errors).reduce((acc, current) => {
+      return current.length > 0 ? false : acc
+    }, true)
+  },
+
+  _handleSubmit(event) {
+    event.preventDefault()
+    this._validateForm(this.state.formData)
+    
+    if(this._isErrorsStateEmpty()) {
+      let ctx = this
+
+      let res = {}
+      for(let fieldname in this.state.formData) {
+        let elem = this.state.formData[fieldname]
+        if(elem.value) json.tupled(res, elem.name, elem.value)
+      }
+      this.props.submitAction({params: res, method: this.props.method})
+        .fail((jqXHR, textStatus, errorThrown) => {
+          let serverErrors = jqXHR.responseJSON.errors
+          for(let key in serverErrors) ctx.state.errors[key].push({type: SERVER_ERROR, value: serverErrors[key]})
+          ctx.setState(ctx.state)
+        })
     }
   }
 })

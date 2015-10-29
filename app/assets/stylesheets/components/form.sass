@@ -4,27 +4,41 @@ form
 
   .feedback
     display: block
-    margin-bottom: 1.6rem
     width: 100%
     color: $red
-    font-size: 1.2rem
-    text-align: center
     height: 1.2rem
+    font-size: 0.8rem
+    text-align: left
+    padding: 1rem
+    height: 2.8rem
+
+    span // to avoid problem with binding react pb inserting a span in some cases
+      width: inherit
+      color: inherit
+      height: inherit
+      font-size: inherit
+      text-align: inherit
+      padding: 0
+      height: inherit
+
+
+  .input-wrapper
+    display: inline-block
+    vertical-align: top
+    width: 100%
+    &.half
+      width: calc(50% - 1.4rem)
+    &.left
+      margin-right: 2.8rem
 
   input
     font-size: 1.2rem
     padding: 1rem 1rem
     width: 100%
     border: none
-    margin-bottom: 1.6rem
 
     &:focus
       outline: none
-
-    &.half
-      width: calc(50% - 0.8rem)
-      &.left
-        margin-right: 1.6rem
 
     &.error
       border: 1px solid $red
@@ -38,8 +52,7 @@ form
       padding: 1.2rem
       text-transform: uppercase
       color: $white
-      background-color: $orange
+      background-color: $light-orange
       
-      &:read-only
-        color: $light-orange
-        cursor: default
+      &:active
+        background-color: $orange

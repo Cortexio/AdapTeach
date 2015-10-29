@@ -27,13 +27,14 @@ export function logout() {
   .done((data, textStatus, jqXHR) => {
     authDispatcher.REMOVE_SESSION()
     router.transitionTo('home')
+    window.location.reload() //hack to rerender page after session erase || need a better solution
   })
 }
 
 export function syncSession() {
   return api.session()
   .done((data, textStatus, jqXHR) => {
-    authDispatcher.SET_SESSION()
+    authDispatcher.SET_SESSION(data)
   })
 }
 
