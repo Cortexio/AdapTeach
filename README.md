@@ -75,13 +75,13 @@ A variable `i18n` is injected in the window to access the i18n engine instance.
 there are different cases:
 
 > SIMPLE TRANSLATION
-* key exemple in the json translation file
+>> key exemple in the json translation file
 ```sh
 {
   translation_key: "value"
 }
 ```
-* source code to use it
+>> source code to use it
 ```sh
 i18n.t("translation_key")
 => "value"
@@ -89,42 +89,39 @@ i18n.t("translation_key")
 
 
 > INTERPOLATION
-  - key exemple in the json translation file
+>> key exemple in the json translation file
 ```sh
 {
   translation_key: "translation %{variable}"
 }
 ```
-  - source code to use it
+>> source code to use it
 ```sh
 i18n.t("translation_key", {variable: "value"})
 => "translation value"
 ```
 
 > PLURALIZATION
-  - key exemple in the json translation file
+>> key exemple in the json translation file
 ```sh
 {
   translation_key: "%{smart_count} value |||| %{smart_count} values",
 }
 ```
-  * source code to use it
+>> source code to use it
 ```sh
 i18n.t("translation_key", {smart_count: 0});
 => "values"
-
 i18n.t("translation_key", {smart_count: 1});
 => "value"
-
 i18n.t("translation_key", {smart_count: 2});
 => "values"
 ```
 
 > SPECIFIC SERVER CASE
-
 If you wanna create a message on the server side and use the i18n engine from the client, you have to follow these instructions:
-* Create your translation in the `messages_<locale>.json`
-* On the server side, your message must have the following structure
+Create your translation in the `messages_<locale>.json`
+>> On the server side, your message must have the following structure
 ```sh
 {
   key: "translation_key",
@@ -133,10 +130,9 @@ If you wanna create a message on the server side and use the i18n engine from th
   }
 }
 ```
-* you will have the following source code to do this
+>> you will have the following source code to do this
 ```sh
 Json.obj("key" -> "translation_key", "params" -> Json.obj("param_key" -> "param value")).stringify
 ```
 In this case, `param_key` is a variable corresponding to the var you set in the translation message like `smart_count` (ref to the pluralization exemple)  
-
 If you wanna render a global error in a form, use the param_key `global` and the error will automatically render just above the submit button.
