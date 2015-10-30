@@ -137,4 +137,4 @@ Create your translation in the `messages_<locale>.json`
 Json.obj("key" -> "translation_key", "params" -> Json.obj("param_key" -> "param value")).stringify
 ```
 In this case, `param_key` is a variable corresponding to the var you set in the translation message like `smart_count` (ref to the pluralization exemple)  
-If you wanna render a global error in a form, use the param_key `global` and the error will automatically render just above the submit button.
+If you wanna render a global error in a form, use the param_key `global` and the error will automatically render just under the submit button.
