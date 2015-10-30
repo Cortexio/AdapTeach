@@ -14,28 +14,28 @@ export default React.createClass({
             method="POST"
             fields={this._signinFields()}
             submitAction={this._handleSignin}
-            submitValue="Sign in" />
+            submitValue={i18n.t('signin')} />
           </div>
       </div> 
     )
   },
 
   _handleSignin(formData) {
-    signin(formData)
+    return signin(formData)
   },
 
   _signinFields() {
     let username = {}
     json.tupled(username, FCST.FIELD.ELEMENT, 'input')
     json.tupled(username, FCST.FIELD.TYPE, 'text')
-    json.tupled(username, FCST.FIELD.PLACEHOLDER, 'Username')
+    json.tupled(username, FCST.FIELD.PLACEHOLDER, i18n.t('authentication_placeholder_username'))
     json.tupled(username, FCST.FIELD.NAME, 'username')
     json.tupled(username, FCST.FIELD.MANDATORY, true)
     
     let password = {}
     json.tupled(password, FCST.FIELD.ELEMENT, 'input')
     json.tupled(password, FCST.FIELD.TYPE, 'password')
-    json.tupled(password, FCST.FIELD.PLACEHOLDER, 'Password')
+    json.tupled(password, FCST.FIELD.PLACEHOLDER, i18n.t('authentication_placeholder_password'))
     json.tupled(password, FCST.FIELD.NAME, 'password')
     json.tupled(password, FCST.FIELD.MANDATORY, true)
 

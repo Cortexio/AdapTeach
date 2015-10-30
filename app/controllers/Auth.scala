@@ -31,7 +31,7 @@ class Auth extends CommonController {
  
   val signinForm = Form (
     tuple  (
-      "username" ->  text.verifying("Enter your last name", !_.trim.isEmpty),
+      "username" ->  text.verifying(Json.obj("key" -> "form_error_mandatory", "params" -> Json.obj("field" -> "username")).toString, !_.trim.isEmpty),
       "password" -> longPassword
     )
   )
@@ -49,7 +49,7 @@ class Auth extends CommonController {
           ) yield (
             maybeUser match {
               case Some(user) => Ok(Json.obj("session" -> user)).withSession("user" -> Json.stringify(User.toJson(user)))
-              case None => BadRequest(Json.obj("errors" -> Json.obj("username" -> "Authentication failed !")))
+              case None => Forbidden(Json.obj("errors" -> Json.obj("global" -> Json.obj("key" -> "authentication_fail"))).toString)
             }
           )
       }
@@ -58,10 +58,10 @@ class Auth extends CommonController {
 
   val signupForm = Form (
     tuple(
-      "firstname" -> text.verifying("Enter your first name", !_.trim.isEmpty),
-      "lastname" -> text.verifying("Enter your last name", !_.trim.isEmpty),
+      "firstname" -> text.verifying(Json.obj("key" -> "form_error_mandatory", "params" -> Json.obj("field" -> "first name")).toString, !_.trim.isEmpty),
+      "lastname" -> text.verifying(Json.obj("key" -> "form_error_mandatory", "params" -> Json.obj("field" -> "last name")).toString, !_.trim.isEmpty),
       "email" -> strictEmail,
-      "username" ->  text.verifying("Enter your last name", !_.trim.isEmpty),
+      "username" ->  text.verifying(Json.obj("key" -> "form_error_mandatory", "params" -> Json.obj("field" -> "username")).toString, !_.trim.isEmpty),
       "password" -> longPassword
     )
   )
@@ -84,14 +84,14 @@ class Auth extends CommonController {
         ) yield (
           maybeAvailableUsernameUser match {
             case Some(userUsername) =>
-              val usernameNotAvailableMessage = username + " is not available"
+              val usernameNotAvailableMessage = Json.obj("key" -> "form_error_unavailable", "params" -> Json.obj("field" -> username)).toString
               Conflict(Json.obj("errors" -> Json.obj("username" -> usernameNotAvailableMessage)))
 
             case None =>
               
               maybeAvailableEmailUser match {
                 case Some(userEmail) =>
-                  val emailNotAvailableMessage = email + " is not available"
+                  val emailNotAvailableMessage = Json.obj("key" -> "form_error_unavailable", "params" -> Json.obj("field" -> email)).toString
                   Conflict(Json.obj("errors" -> Json.obj("email" -> emailNotAvailableMessage)))
 
                 case None =>
@@ -109,7 +109,7 @@ class Auth extends CommonController {
   }
 
   def emailForm = Form (
-    "email" -> text
+    "email" -> strictEmail
   )
 
   def availableEmail() =  Action.async { implicit req =>
@@ -125,8 +125,8 @@ class Auth extends CommonController {
           ) yield (
             maybeUser match {
               case Some(user) => 
-                val notAvailableMessage = email + " is not available"
-                Conflict(Json.obj("errors" -> Json.obj("email" -> notAvailableMessage)))
+                val emailNotAvailableMessage = Json.obj("key" -> "form_error_unavailable", "params" -> Json.obj("field" -> email)).toString
+                Conflict(Json.obj("errors" -> Json.obj("email" -> emailNotAvailableMessage)))
               
               case None => Ok
             }
@@ -136,7 +136,7 @@ class Auth extends CommonController {
   }
 
   def usernameForm = Form (
-    "username" -> text.verifying("Enter your username", !_.trim.isEmpty)
+    "username" ->  text.verifying(Json.obj("key" -> "form_error_mandatory", "params" -> Json.obj("field" -> "username")).toString, !_.trim.isEmpty)
   )
 
   def availableUsername() =  Action.async { implicit req =>
@@ -152,8 +152,8 @@ class Auth extends CommonController {
           ) yield (
             maybeUser match {
               case Some(user) => 
-                val notAvailableMessage = username + " is not available"
-                Conflict(Json.obj("errors" -> Json.obj("username" -> notAvailableMessage)))
+                val usernameNotAvailableMessage = Json.obj("key" -> "form_error_unavailable", "params" -> Json.obj("field" -> username)).toString
+                Conflict(Json.obj("errors" -> Json.obj("username" -> usernameNotAvailableMessage)))
               
               case None => Ok
             }

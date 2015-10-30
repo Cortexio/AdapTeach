@@ -1,0 +1,18 @@
+{
+  "hello": "Hello",
+  "signin": "Sign In",
+  "signup": "Sign Up",
+  "logout": "Logout",
+
+  "authentication_placeholder_username": "Username",
+  "authentication_placeholder_password": "Password",
+  "authentication_placeholder_firstname": "First name",
+  "authentication_placeholder_lastname": "Last name",
+  "authentication_placeholder_email": "Email",
+  "authentication_fail": "Authentication failed",
+
+  "form_error_email_invalid": "Enter a valid email address",
+  "form_error_password_too_short": "Enter a longer password",
+  "form_error_unavailable": "%{field} is not available",
+  "form_error_mandatory": "%{field} mandatory"
+}

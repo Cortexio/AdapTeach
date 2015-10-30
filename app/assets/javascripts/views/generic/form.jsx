@@ -13,8 +13,9 @@ import FCST from '../../constants/formConstants'
 * return json object with method and params exemple : { method : "POST", params : { tata: "tata", toto: "toto" } }
 */
 
-const SERVER_ERROR = "server"
-const CLIENT_ERROR = "client"
+const SERVER_ERROR = 'server'
+const CLIENT_ERROR = 'client'
+const GLOBAL_FEEDBACK = 'global'
 
 function initErrors(fields) {
   return this.props.fields.map((field, index) => {
@@ -23,7 +24,7 @@ function initErrors(fields) {
     return obj
   }).reduce((acc, field) => {
     return json.extend(acc, field)
-  })
+  }, json.tupled({}, GLOBAL_FEEDBACK, []) )
 }
 
 function formInitialState() {
@@ -38,7 +39,7 @@ function formInitialState() {
               name: field[FCST.FIELD.NAME], 
               element: field[FCST.FIELD.ELEMENT], 
               mandatory: field[FCST.FIELD.MANDATORY],
-              autocomplete: field[FCST.FIELD.AUTOCOMPLETE] !== undefined ? field[FCST.FIELD.AUTOCOMPLETE] ? "on" : "off" : "on",
+              autocomplete: field[FCST.FIELD.AUTOCOMPLETE] !== undefined ? field[FCST.FIELD.AUTOCOMPLETE] ? 'on' : 'off' : 'on',
               half: field[FCST.FIELD.HALF_SIZE],
               style: field[FCST.FIELD.STYLE] || '',
               type: field[FCST.FIELD.TYPE],
@@ -73,10 +74,12 @@ export default React.createClass({
       }
     })
 
+    let formErrors = this.state.errors[GLOBAL_FEEDBACK]
     return (
       <form method={this.props.method} onSubmit={this._handleSubmit}>
         {fields}
         <input type="submit" value={this.props.submitValue} />
+        <p className="feedback global">{formErrors.length > 0 ? formErrors[0].value : ''}</p>
       </form>
     )
   },
@@ -106,6 +109,25 @@ export default React.createClass({
     this.setState(this.state)
   },
 
+  _resetGlobalErrors() {
+    this.state.errors[GLOBAL_FEEDBACK] = []
+    this.setState(this.state)
+  },
+
+  _isErrorsStateEmpty() {
+    return json.values(this.state.errors).reduce((acc, current) => {
+      return current.length > 0 ? false : acc
+    }, true)
+  },
+
+  _handleServerErrorsRendering(errors, ctx) {
+    for(let key in errors) {
+      let currentError = errors[key]
+      ctx.state.errors[key].push({type: SERVER_ERROR, value: i18n.t(errors[key].key, currentError.params)})
+    }
+    ctx.setState(ctx.state)
+  },
+
   _validateForm(fields) {
     for(let fieldname in fields) {
       this._resetClientErrors(fieldname)
@@ -113,17 +135,17 @@ export default React.createClass({
       if(elem && elem.value != null) {
         switch(elem.type) {
           case FCST.FIELD_TYPES.PASSWORD: 
-            if(elem.value == null || elem.value.length < 6) this.state.errors["password"].push({type: CLIENT_ERROR, value: "Enter a longer password"})
+            if(elem.value == null || elem.value.length < 6) this.state.errors['password'].push({type: CLIENT_ERROR, value: i18n.t('form_error_password_too_short')})
             break;
 
           case FCST.FIELD_TYPES.EMAIL: 
             var mailRegex = new RegExp('^.+\\@.+\\..+$')
-            if(!elem.value.match(mailRegex)) this.state.errors["email"].push({type: CLIENT_ERROR, value: "Enter a valid email"})
+            if(!elem.value.match(mailRegex)) this.state.errors['email'].push({type: CLIENT_ERROR, value: i18n.t('form_error_email_invalid')})
             break;
 
           default: break;
         }
-      } else if(elem.mandatory) this.state.errors[fieldname].push({type: CLIENT_ERROR, value: "Enter your " + elem.placeholder.toLowerCase()})
+      } else if(elem.mandatory) this.state.errors[fieldname].push({ type: CLIENT_ERROR, value: i18n.t('form_error_mandatory', {field: elem.placeholder.toLowerCase()}) })
     }
     this.setState(this.state)
   },
@@ -158,26 +180,20 @@ export default React.createClass({
       ctx._resetServerErrors(field.name)
       if(field[actionType].reset) field[actionType].reset(domNode)
       if(field[actionType].error) field[actionType].error(domNode)
-      let serverErrors = jqXHR.responseJSON.errors
-      //set server errors on the state
       ctx._resetClientErrors(field.name) // to allow errors from server to be render instead of low priority client errors
-      for(let key in serverErrors) ctx.state.errors[key].push({type: SERVER_ERROR, value: serverErrors[key]})
-      ctx.setState(ctx.state)
-    })
-  },
 
-  _isErrorsStateEmpty() {
-    return json.values(this.state.errors).reduce((acc, current) => {
-      return current.length > 0 ? false : acc
-    }, true)
+      let errors = JSON.parse(jqXHR.responseText).errors
+      ctx._handleServerErrorsRendering(errors, ctx)
+    })
   },
 
   _handleSubmit(event) {
     event.preventDefault()
+    this._resetGlobalErrors()
     this._validateForm(this.state.formData)
     
     if(this._isErrorsStateEmpty()) {
-      let ctx = this
+      let ctx = this // defined to be used in the http request fail context because this not longer corresponding to the component context
 
       let res = {}
       for(let fieldname in this.state.formData) {
@@ -186,9 +202,8 @@ export default React.createClass({
       }
       this.props.submitAction({params: res, method: this.props.method})
         .fail((jqXHR, textStatus, errorThrown) => {
-          let serverErrors = jqXHR.responseJSON.errors
-          for(let key in serverErrors) ctx.state.errors[key].push({type: SERVER_ERROR, value: serverErrors[key]})
-          ctx.setState(ctx.state)
+          let errors = JSON.parse(jqXHR.responseText).errors
+          ctx._handleServerErrorsRendering(errors, ctx)
         })
     }
   }
