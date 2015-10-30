@@ -1,4 +1,4 @@
-export default {
+export default {  
   /* Object util functions */
   /*
   * Extends a base object with all the key/values of another.

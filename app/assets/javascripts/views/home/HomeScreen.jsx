@@ -19,7 +19,7 @@ export default React.createClass ({
   render() {
     return (
       <div>
-        Hello {this.props.session.username ? this.props.session.firstname + ' ' + this.props.session.lastname : 'Guest'}
+        {i18n.t('hello')} {this.props.session.username ? this.props.session.firstname + ' ' + this.props.session.lastname : 'Guest'}
         <HeadMenu session={this.props.session} ></HeadMenu>
       </div>
     )

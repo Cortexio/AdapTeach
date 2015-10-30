@@ -15,7 +15,7 @@ export default React.createClass({
           method="POST"
           fields={this._signupFields()}
           submitAction={this._handleSignup}
-          submitValue="Sign up" />
+          submitValue={i18n.t('signup')} />
       </div>
     )
   },
@@ -24,7 +24,7 @@ export default React.createClass({
     let firstname = {}
     json.tupled(firstname, FCST.FIELD.ELEMENT, 'input')
     json.tupled(firstname, FCST.FIELD.TYPE, 'text')
-    json.tupled(firstname, FCST.FIELD.PLACEHOLDER, 'First name')
+    json.tupled(firstname, FCST.FIELD.PLACEHOLDER, i18n.t('authentication_placeholder_firstname'))
     json.tupled(firstname, FCST.FIELD.NAME, 'firstname')
     json.tupled(firstname, FCST.FIELD.MANDATORY, true)
     json.tupled(firstname, FCST.FIELD.HALF_SIZE, FCST.FIELD.POSITION.LEFT)
@@ -32,7 +32,7 @@ export default React.createClass({
     let lastname = {}
     json.tupled(lastname, FCST.FIELD.ELEMENT, 'input')
     json.tupled(lastname, FCST.FIELD.TYPE, 'text')
-    json.tupled(lastname, FCST.FIELD.PLACEHOLDER, 'Last name')
+    json.tupled(lastname, FCST.FIELD.PLACEHOLDER, i18n.t('authentication_placeholder_lastname'))
     json.tupled(lastname, FCST.FIELD.NAME, 'lastname')
     json.tupled(lastname, FCST.FIELD.MANDATORY, true)
     json.tupled(lastname, FCST.FIELD.HALF_SIZE, FCST.FIELD.POSITION.RIGHT)
@@ -40,7 +40,7 @@ export default React.createClass({
     let email = {}
     json.tupled(email, FCST.FIELD.ELEMENT, 'input')
     json.tupled(email, FCST.FIELD.TYPE, 'email')
-    json.tupled(email, FCST.FIELD.PLACEHOLDER, 'Email')
+    json.tupled(email, FCST.FIELD.PLACEHOLDER, i18n.t('authentication_placeholder_email'))
     json.tupled(email, FCST.FIELD.NAME, 'email')
     json.tupled(email, FCST.FIELD.ONBLUR, {action : checkAvailabilityEmail, error: this._fieldInError, reset: this._fieldReset})
     json.tupled(email, FCST.FIELD.MANDATORY, true)
@@ -49,7 +49,7 @@ export default React.createClass({
     let username = {}
     json.tupled(username, FCST.FIELD.ELEMENT, 'input')
     json.tupled(username, FCST.FIELD.TYPE, 'text')
-    json.tupled(username, FCST.FIELD.PLACEHOLDER, 'Username')
+    json.tupled(username, FCST.FIELD.PLACEHOLDER, i18n.t('authentication_placeholder_username'))
     json.tupled(username, FCST.FIELD.NAME, 'username')
     json.tupled(username, FCST.FIELD.ONCHANGE, {action : checkAvailabilityUsername, success: this._fieldInSuccess, error: this._fieldInError, reset: this._fieldReset})
     json.tupled(username, FCST.FIELD.MANDATORY, true)
@@ -58,7 +58,7 @@ export default React.createClass({
     let password = {}
     json.tupled(password, FCST.FIELD.ELEMENT, 'input')
     json.tupled(password, FCST.FIELD.TYPE, 'password')
-    json.tupled(password, FCST.FIELD.PLACEHOLDER, 'Password')
+    json.tupled(password, FCST.FIELD.PLACEHOLDER, i18n.t('authentication_placeholder_password'))
     json.tupled(password, FCST.FIELD.NAME, 'password')
     json.tupled(password, FCST.FIELD.MANDATORY, true)
 

@@ -1,0 +1,18 @@
+{
+  "hello": "Bonjour",
+  "signin": "Se connecter",
+  "signup": "Inscription",
+  "logout": "Deconnexion",
+
+  "authentication_placeholder_username": "Nom d'utilisateur",
+  "authentication_placeholder_password": "Mot de passe",
+  "authentication_placeholder_firstname": "Prénom",
+  "authentication_placeholder_lastname": "Nom de famille",
+  "authentication_placeholder_email": "Email",
+  "authentication_fail": "Authentification echouée",
+
+  "form_error_email_invalid": "Saisir une adresse valide",
+  "form_error_password_too_short": "Saisir un mot de passe plus long",
+  "form_error_unavailable": "%{field} n'est pas disponible",
+  "form_error_mandatory": "%{field} requis"
+}

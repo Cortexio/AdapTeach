@@ -56,4 +56,4 @@ gulp.task('watch-sass', function() {
 
 gulp.task('build', ['build-sass', 'build-jsx']);
 
-gulp.task('default', ['watch-sass', 'watch-jsx']);
+gulp.task('default', ['build-sass', 'build-jsx', 'watch-sass', 'watch-jsx']);

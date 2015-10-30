@@ -28,7 +28,11 @@ export default {
     return ajaxWithFeedback('POST', {email: email}, '/api/availability/email')
   },
 
-    availableUsername(username) {
+  availableUsername(username) {
     return ajaxWithFeedback('POST', {username: username}, '/api/availability/username')
+  },
+
+  loadMessages(locale) {
+    return $.getJSON('/assets/i18n/messages_' + locale + '.json')
   }
 }

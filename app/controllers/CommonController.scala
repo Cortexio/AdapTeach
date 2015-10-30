@@ -16,13 +16,13 @@ abstract class CommonController extends Controller {
   val rxemail = """.+\@.+\..+""".r
   def strictEmail = {
     PlayForm.Forms.text
-         .verifying(PlayForm.validation.Constraints.pattern(rxemail, error = "Enter a valid email address"))
+         .verifying(PlayForm.validation.Constraints.pattern(rxemail, error = Json.obj("key" -> "form_error_email_invalid").toString))
          .transform[String](_.toLowerCase, identity[String])
   }
 
   def longPassword: PlayForm.Mapping[String] = longPassword(5)
   def longPassword(size: Int): PlayForm.Mapping[String] = {
-    PlayForm.Forms.text.verifying("Enter a longer password", (s: String) => s.trim.size > size)
+    PlayForm.Forms.text.verifying(Json.obj("key" -> "form_error_password_too_short").toString, (s: String) => s.trim.size > size)
   }
 } 
 
