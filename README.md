@@ -86,7 +86,7 @@ there are different cases:
 i18n.t("translation_key")
 => "value"
 ```
-
+- - - -
 
 > INTERPOLATION
 >> key exemple in the json translation file
@@ -100,6 +100,7 @@ i18n.t("translation_key")
 i18n.t("translation_key", {variable: "value"})
 => "translation value"
 ```
+- - - -
 
 > PLURALIZATION
 >> key exemple in the json translation file
@@ -117,6 +118,7 @@ i18n.t("translation_key", {smart_count: 1});
 i18n.t("translation_key", {smart_count: 2});
 => "values"
 ```
+- - - -
 
 > SPECIFIC SERVER CASE
 If you wanna create a message on the server side and use the i18n engine from the client, you have to follow these instructions:
