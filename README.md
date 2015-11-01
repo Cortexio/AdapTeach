@@ -120,7 +120,7 @@ i18n.t("translation_key", {smart_count: 2});
 ```
 - - - -
 
-> SPECIFIC SERVER CASE
+> SPECIFIC SERVER CASE  
 If you wanna create a message on the server side and use the i18n engine from the client, you have to follow these instructions:
 Create your translation in the `messages_<locale>.json`
 >> On the server side, your message must have the following structure
