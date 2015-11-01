@@ -10,7 +10,9 @@ resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
 
 libraryDependencies ++= Seq(
   "org.reactivemongo" %% "reactivemongo" % "0.11.7",
-  "org.mindrot" % "jbcrypt" % "0.3m"
+  "org.mindrot" % "jbcrypt" % "0.3m",
+  "net.databinder.dispatch" %% "dispatch-core" % "0.11.2",
+  "io.netty" % "netty" % "3.9.9.Final" force()
 )
 
 // Play provides two styles of routers, one expects its actions to be injected, the

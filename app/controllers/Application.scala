@@ -7,15 +7,24 @@ import play.api.libs.json._
 import scala.concurrent._
 import scala.concurrent.ExecutionContext.Implicits.global
 
+import graph._
+
 import models.{User}
 
 class Application extends Controller{
 
-  def index(url: String) = Action {
-    Ok(views.html.index())
-  }
+	def index(url: String) = Action {
+		Ok(views.html.index())
+	}
 
-  def session = WithSession { request =>
-    Ok(User.toJson(request.user))
-  }
+	def session = WithSession { request =>
+		Ok(User.toJson(request.user))
+	}
+
+	def test = Action.async {
+		Cypher.execute("MATCH (n) RETURN id(n)").map { str =>
+			Ok(views.html.test(str))
+		}
+	}
+
 }
