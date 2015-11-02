@@ -9,9 +9,9 @@ scalaVersion := "2.11.6"
 resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
 
 libraryDependencies ++= Seq(
+	ws,
   "org.reactivemongo" %% "reactivemongo" % "0.11.7",
   "org.mindrot" % "jbcrypt" % "0.3m",
-  "net.databinder.dispatch" %% "dispatch-core" % "0.11.2",
   "io.netty" % "netty" % "3.9.9.Final" force()
 )
 
