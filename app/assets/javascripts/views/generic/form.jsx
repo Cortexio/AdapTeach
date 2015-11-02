@@ -12,7 +12,9 @@ function signinInitialState() {
           let obj = {}
           obj[field[FCST.FIELD.NAME]] = 
             {name: field[FCST.FIELD.NAME], element: field[FCST.FIELD.ELEMENT], mandatory: field[FCST.FIELD.MANDATORY], half: field[FCST.FIELD.HALF_SIZE],
-              style: field[FCST.FIELD.STYLE], type: field[FCST.FIELD.TYPE], placeholder: field[FCST.FIELD.PLACEHOLDER], unique: field[FCST.FIELD.UNIQUE], value: null}
+              style: field[FCST.FIELD.STYLE], type: field[FCST.FIELD.TYPE], placeholder: field[FCST.FIELD.PLACEHOLDER], unique: field[FCST.FIELD.UNIQUE],
+              options: field[FCST.FIELD.OPTIONS], multiple: field[FCST.FIELD.MULTIPLE], originalOptions: field[FCST.FIELD.OPTIONS], value: null,
+              showOptions: false}
           return obj
         }).reduce((acc, field) => {
           return json.extend(acc, field)
@@ -35,6 +37,7 @@ var form = React.createClass({
     let fields = this.props.fields.map((field, index) => {
       switch(field.element) {
         case FCST.FIELDS.INPUT : return this.renderInput(this.state.formData[field[FCST.FIELD.NAME]])
+        case FCST.FIELDS.SELECT : return this.renderSelect(this.state.formData[field[FCST.FIELD.NAME]])
         default : console.log(field)
       }
     })
@@ -54,6 +57,23 @@ var form = React.createClass({
         className={field.half ? 'half ' + field.half : '' + field.style || ''}
         placeholder={field.placeholder} name={field.name} 
         onChange={this._handleChange.bind(null, field.name)} />
+    )
+  },
+
+  renderSelect(field) {
+    var options = field.options.map(function(option) {
+      return (<li key={option.id} onClick={this._handleClickSelectMultiple.bind(null, option,field.name)}> <a href="#"> {option.text} </a> </li>)
+    }.bind(this))
+    let selectValue = this.state.formData[field.name].value
+    var chosen = !selectValue ? '' : selectValue.map(function(item) {
+      return (item.text + ' ')
+    })
+    return (
+      <div>
+        <input type="text" placeholder="Search" onChange={this._filterList.bind(null, field.name)} onFocus={this._handleFocus.bind(null, field.name)}/>
+        { this.state.formData[field.name].showOptions ? <ul> <li key="cancel" onClick={this._handleCancel.bind(null, field.name)}> <a href="#"> Cancel </a> </li> {options} </ul> : null }
+        {chosen}
+      </div>
     )
   },
 
@@ -97,8 +117,40 @@ var form = React.createClass({
   _handleChange(fieldname, event) {
     let elem = event.target
     this.state.formData[fieldname].value = elem.value || undefined
+  },
+
+  _handleClickSelectMultiple(value,fieldname, event) {
+
+    if (!this.state.formData[fieldname].value) {
+      this.state.formData[fieldname].value = new Array()
+    }
+    this.state.formData[fieldname].value.push({id: value.id, text: value.text})
+    this.state.formData[fieldname].originalOptions = this.state.formData[fieldname].originalOptions.filter(function (option) {
+      return option.id != value.id;
+    })
+    this.state.formData[fieldname].options = this.state.formData[fieldname].originalOptions
+    this.state.formData[fieldname].showOptions = false
+    this.setState(this.state)
+  },
+
+  _filterList(fieldname, event){
+    var updatedList = this.state.formData[fieldname].originalOptions;
+    updatedList = updatedList.filter(function(option){
+      return option.text.toLowerCase().search(event.target.value.toLowerCase()) !== -1;
+    });
+    this.state.formData[fieldname].options = updatedList
+    this.setState(this.state)
+  },
+
+  _handleFocus(fieldname, event) {
+    this.state.formData[fieldname].showOptions = true
+    this.setState(this.state)
+  },
+
+  _handleCancel(fieldname, event) {
+    this.state.formData[fieldname].showOptions = false
+    this.setState(this.state)
   }
 })
 
 export default form
-

@@ -1,6 +1,7 @@
 export default {
   FIELDS : {
-    INPUT: "input"
+    INPUT: "input",
+    SELECT: "select"
   },
 
   FIELD : {
@@ -11,6 +12,10 @@ export default {
     MANDATORY: "mandatory",
     STYLE: "style",
     HALF_SIZE: "half",
+    ID: "id",
+    OPTIONS: "options",
+    MULTIPLE: "multiple",
+    LABEL: "label",
     POSITION: {
       LEFT: "left",
       RIGHT: "right"

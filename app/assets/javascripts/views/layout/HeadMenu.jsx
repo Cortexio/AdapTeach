@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { logout } from '../../actions/AuthActions'
+import { logout } from '../../actions/authActions'
 
 var component = React.createClass({
   
@@ -26,6 +26,8 @@ var component = React.createClass({
         <a className="btn btn-default signin" href="/signin">Signin</a>
         <br />
         <a className="btn btn-hightlight signup" href="/signup">Signup</a>
+        <br />
+        <a className="btn btn-hightlight objective" href="/objective">New Objective</a>
       </div>
     )
   },

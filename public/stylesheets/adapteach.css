@@ -78,3 +78,42 @@ form input {
     text-transform: uppercase;
     color: #FFFFFF;
     background-color: #f5b45d; }
+
+form select {
+  font-size: 1.2rem;
+  padding: 1rem 1rem;
+  width: 100%;
+  border: none;
+  margin-bottom: 1.6rem; }
+  form select.half {
+    width: calc(50% - 0.8rem); }
+    form select.half.left {
+      margin-right: 1.6rem; }
+  form select[type=submit] {
+    border: none;
+    padding: 1.2rem;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    background-color: #f5b45d; }
+
+form ul {
+  font-size: 1.2rem;
+  padding: 1rem 30rem;
+  width: 100%;
+  border: none;
+  margin-bottom: 1.6rem;
+  height: 150px;
+  overflow: auto;
+  background-color: #28406c; }
+  form ul li {
+    font-size: 1.2rem;
+    padding: 1rem 1rem;
+    width: 100%;
+    border: none;
+    margin-bottom: 1.6rem;
+    border-top: 1px solid #196090;
+    display: block; }
+    form ul li a {
+      text-decoration: none;
+      color: white;
+      display: block; }
