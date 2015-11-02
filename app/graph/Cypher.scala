@@ -1,8 +1,32 @@
 package graph
 
+import play.api.libs.json._
 import dispatch._, Defaults._
 
+case class Car (
+	model: String,
+	color: String
+)
+
+
+
 object Cypher {
+
+	implicit val carReader: Reads[Car] = (
+	  (__ \ "color").read[String] and
+	  (__ \ "model").read[String]
+	) (Car.apply _)
+
+	private def parse(jsonString: String) = {
+	  val jsonJsValue = Json.parse(jsonString)
+	  jsonJsValue.as[Car]
+	}
+
+	object CarJsonDeserializer extends (com.ning.http.client.Response => Car) {
+		override def apply(response: com.ning.http.client.Response): Car = {
+			(dispatch.as.String andThen (jsonString => parse(jsonString)))(response)
+		}
+	}
 
 	val endpoint = url("http://localhost:7474/db/data/transaction/commit")
 									.POST
