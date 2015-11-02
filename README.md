@@ -120,7 +120,7 @@ i18n.t("translation_key", {smart_count: 2});
 ```
 - - - -
 
-> SPECIFIC SERVER CASE
+> SPECIFIC SERVER CASE  
 If you wanna create a message on the server side and use the i18n engine from the client, you have to follow these instructions:
 Create your translation in the `messages_<locale>.json`
 >> On the server side, your message must have the following structure
@@ -128,13 +128,14 @@ Create your translation in the `messages_<locale>.json`
 {
   key: "translation_key",
   params: {
-    param_key: "param value"
+    any_key_you_want: "param value"
   }
 }
 ```
->> you will have the following source code to do this
+`KEY` and `PARAMS` are keywords here. You must use it. the other keys are completely your call.
+>> you will have this kind of source code to do this (exemple of a json response in scala Action)
 ```sh
-Json.obj("key" -> "translation_key", "params" -> Json.obj("param_key" -> "param value")).stringify
+Ok(Json.obj("any_key" -> Json.obj("key" -> "translation_key", "params" -> Json.obj("param_key" -> "param value")).stringify))
 ```
 In this case, `param_key` is a variable corresponding to the var you set in the translation message like `smart_count` (ref to the pluralization exemple)  
-If you wanna render a global error in a form, use the param_key `global` and the error will automatically render just under the submit button.
+If you wanna render a global error in a form, use the param_key `global` instead of `any_key`; which is a random choice just for the exemple in this case; and the error will automatically render just under the submit button.
