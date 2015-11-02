@@ -17,8 +17,12 @@ object Cypher {
 					} ]
 				}
 			""")
-		val str = Http(request OK as.String)
-		str
+		val futureResponse: Future[Either[Throwable, String]] = Http(request OK as.String).either
+		val result: Future[String] = futureResponse map { either =>
+			if (either.isLeft) either.left.get.getMessage
+			else either.right.get
+		}
+		result
 	}
 
 }
