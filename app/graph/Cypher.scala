@@ -9,25 +9,21 @@ import scala.concurrent.Future
 object Cypher {
 
 	implicit val context = play.api.libs.concurrent.Execution.Implicits.defaultContext
+	val url = "http://localhost:7474/db/data/transaction/commit"
+	val backend = WS.url(url)
+									.withAuth("neo4j", "password", WSAuthScheme.BASIC)
 
-	def execute(query:String) : Future[String] = {
+	def execute(query:String): Future[String] = {
 
-		val url = "http://localhost:7474/db/data/transaction/commit"
+		val data = Json.obj(
+			"statements" -> Json.arr(
+				Json.obj("statement" -> query)
+			)
+		)
 
-		val body = s"""
-				{
-					"statements" : [ {
-						"statement" : "$query"
-					} ]
-				}
-			"""
-
-		val futureResponse = WS.url(url)
-													.withAuth("neo4j", "password", WSAuthScheme.BASIC)
-													.withHeaders("Content-Type" -> "application/json")
-													.post(body)
+		val futureResponse = backend.post(data)
 		futureResponse map { response =>
-			response.body
+			Json.prettyPrint(response.json)
 		}
 	}
 

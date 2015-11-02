@@ -22,7 +22,8 @@ class Application extends Controller{
 	}
 
 	def test = Action.async {
-		Cypher.execute("MATCH (n) RETURN id(n) as id") map { result =>
+		Cypher.execute("MATCH (n) RETURN id(n) as id, n") map { result =>
+			println(result)
 			Ok(views.html.test(result))
 		}
 	}
