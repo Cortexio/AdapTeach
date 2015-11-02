@@ -3,8 +3,6 @@ import json from '../../helpers/json'
 
 import FCST from '../../constants/formConstants'
 
-var SelectBox = React.createFactory(require("../../../../../node_modules/react-select-box/lib/select-box"))
-
 var div = React.createElement.bind(null,'div')
 var option = React.createElement.bind(null,'option')
 var h1 = React.createElement.bind(null,'h1')
