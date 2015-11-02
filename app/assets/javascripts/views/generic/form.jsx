@@ -3,6 +3,12 @@ import json from '../../helpers/json'
 
 import FCST from '../../constants/formConstants'
 
+var SelectBox = React.createFactory(require("../../../../../node_modules/react-select-box/lib/select-box"))
+
+var div = React.createElement.bind(null,'div')
+var option = React.createElement.bind(null,'option')
+var h1 = React.createElement.bind(null,'h1')
+
 function signinInitialState() {
   return (
     {
@@ -18,7 +24,9 @@ function signinInitialState() {
           return obj
         }).reduce((acc, field) => {
           return json.extend(acc, field)
-        })
+        }),
+      value: null,
+      values: []
     }
   )
 }
@@ -113,7 +121,6 @@ var form = React.createClass({
     }
     else this.setState(this.state)
   },
-
   _handleChange(fieldname, event) {
     let elem = event.target
     this.state.formData[fieldname].value = elem.value || undefined

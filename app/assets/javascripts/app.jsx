@@ -11,8 +11,6 @@ import signin from './views/signin'
 import signup from './views/signup'
 import objective from './views/objective'
 
-import { syncSession } from './actions/authActions'
-
 
 router
   .addState('home', State('', home))
@@ -23,5 +21,4 @@ router
 
 window.init = function () {
   router.init()
-  syncSession()
 }
