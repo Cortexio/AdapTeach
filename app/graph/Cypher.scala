@@ -23,7 +23,8 @@ object Cypher {
 
 		val futureResponse = backend.post(data)
 		futureResponse map { response =>
-			Json.prettyPrint(response.json)
+			if (response.status != 200) "ERROR : " + response.status
+			else Json.prettyPrint(response.json)
 		}
 	}
 
