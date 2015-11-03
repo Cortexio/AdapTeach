@@ -10,11 +10,15 @@ import graph.CategoryRepo
 
 class Category extends Controller {
 
+	def read(uuid: String) = Action.async { request =>
+		CategoryRepo.find(uuid) map { category =>
+			Ok(category.toString)
+		}
+	}
+
 	def create() = Action.async(parse.json) { request =>
-		println(request.body \ "name")
-		CategoryRepo.create((request.body \ "name").as[String]) map { node =>
-			println(node)
-			Ok(node)
+		CategoryRepo.create((request.body \ "name").as[String]) map { createdCategory =>
+			Ok(createdCategory)
 		}
 	}
 

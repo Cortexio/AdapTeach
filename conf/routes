@@ -5,8 +5,6 @@
 # Home page
 GET     /                               controllers.Application.index(url="")
 
-GET			/api/test												controllers.Application.test()
-
 # Api routes
 GET     /api/session                    controllers.Application.session()
 
@@ -16,6 +14,8 @@ GET     /api/logout                     controllers.Auth.logout()
 POST    /api/availability/email         controllers.Auth.availableEmail()
 POST    /api/availability/username      controllers.Auth.availableUsername()
 
+# Category
+GET			/api/category/:uuid							controllers.Category.read(uuid: String)
 POST		/api/category										controllers.Category.create
 
 # Map static resources from the /public folder to the /assets URL path

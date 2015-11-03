@@ -65,11 +65,7 @@ object User {
 	}
 }
 
-case class Category (
-  id: String,
-  dname: String,
-  parent: Category
-)
+
 
 case class Objective (
   id: String,

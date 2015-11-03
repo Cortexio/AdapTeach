@@ -13,11 +13,14 @@ object Cypher {
 	val backend = WS.url(url)
 									.withAuth("neo4j", "password", WSAuthScheme.BASIC)
 
-	def execute(query:String): Future[String] = {
+	def execute(statement:String, parameters: JsObject): Future[String] = {
 
 		val data = Json.obj(
 			"statements" -> Json.arr(
-				Json.obj("statement" -> query)
+				Json.obj(
+					"statement" -> statement,
+					"parameters" -> parameters
+				)
 			)
 		)
 
