@@ -23,7 +23,8 @@ object Cypher {
 
 		val futureResponse = backend.post(data)
 		futureResponse map { response =>
-			if (response.status != 200) "NEO4J ERROR : " + response.status
+			if (response.status != 200)
+				throw new Exception("Neo4j server answered : " + response.status + " - " + response.statusText)
 			else Json.prettyPrint(response.json)
 		} recover {
 			case e: Exception => "SERVER ERROR : " + e.getMessage
