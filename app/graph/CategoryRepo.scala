@@ -13,12 +13,11 @@ object CategoryRepo {
 		val statement = "MATCH (n {uuid: {uuid}}) RETURN n"
 		val parameters = Json.obj("uuid" -> uuid)
 		Cypher.execute(statement, parameters) map { result =>
-			println(result)
 			Category(uuid, "Fake Category")
 		}
 	}
 
-	def create(name: String): Future[String] = {
+	def create(name: String): Future[CypherResponse] = {
 		val statement = "CREATE (n:Category {name: {name}, uuid: {uuid}}) RETURN n"
 		val parameters = Json.obj(
 			"uuid" -> UUID.randomUUID,

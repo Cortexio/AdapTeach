@@ -18,7 +18,7 @@ class Category extends Controller {
 
 	def create() = Action.async(parse.json) { request =>
 		CategoryRepo.create((request.body \ "name").as[String]) map { createdCategory =>
-			Ok(createdCategory)
+			Ok(createdCategory.toString)
 		}
 	}
 
