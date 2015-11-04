@@ -56,7 +56,7 @@ object Cypher {
 	val backend = WS.url(url)
 									.withAuth("neo4j", "password", WSAuthScheme.BASIC)
 
-	def execute(statement:String, parameters: JsObject): Future[CypherResponse] = {
+	def execute(statement:String, parameters: JsObject): Future[CypherResult] = {
 
 		val data = Json.obj(
 			"statements" -> Json.arr(
@@ -75,11 +75,16 @@ object Cypher {
 			} else {
 				val json: JsValue = response.json
 				json.validate[CypherResponse] match {
-					case s: JsSuccess[CypherResponse] => s.get
+					case s: JsSuccess[CypherResponse] => checkNoErrors(s.get)
 					case e: JsError => throw new Exception("Unable to parse CypherResult JSON: " + JsError.toJson(e).toString)
 				}
 			}
 		}
+	}
+
+	def checkNoErrors(response: CypherResponse): CypherResult = {
+		if (response.errors.nonEmpty) throw new Exception("Cypher errors : " + response.errors)
+		response.results(0) // Only one statement was sent
 	}
 
 }
