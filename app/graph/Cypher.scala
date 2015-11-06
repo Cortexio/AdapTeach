@@ -1,4 +1,4 @@
-package graph
+ package graph
 
 import play.api.libs.json._
 import play.api.libs.json.Reads._
@@ -13,14 +13,13 @@ case class CypherResponse (
 	errors: Seq[CypherError]
 )
 
-case class CypherResult (
-	columns: Seq[String],
-	data: Seq[CypherResultItem]
+case class CypherStatementResult (
+	rows: Seq[JsValue]
 )
 
-case class CypherResultItem (
-	row: Seq[JsValue],
-	graph: JsObject
+case class CypherResult (
+	columns: Seq[String],
+	statements: Seq[CypherStatementResult]
 )
 
 case class CypherError (
@@ -32,25 +31,22 @@ object Cypher {
 
 	implicit val context = play.api.libs.concurrent.Execution.Implicits.defaultContext
 
-	implicit val cypherResultDataReads: Reads[CypherResultItem] = (
-		(__ \ "row").read[Seq[JsValue]] and
-		(__ \ "graph").read[JsObject]
-	)(CypherResultItem.apply _)
-
-	implicit val cypherResultReads: Reads[CypherResult] = (
-		(__ \ "columns").read[Seq[String]] and
-		(__ \ "data").read[Seq[CypherResultItem]]
-	)(CypherResult.apply _)
-
 	implicit val cypherErrorReads: Reads[CypherError] = (
 		(__ \ "code").read[String] and
 		(__ \ "message").read[String]
 	)(CypherError.apply _)
 
-	implicit val cypherResponseReads: Reads[CypherResponse] = (
-		(__ \ "results").read[Seq[CypherResult]] and
-		(__ \ "errors").read[Seq[CypherError]]
-	)(CypherResponse.apply _)
+	implicit val cypItemReader: Reads[CypherStatementResult] = Json.reads[CypherStatementResult] <~ (__ \ "row").read(Reads.seq[JsValue])
+
+	implicit val cypResultReader: Reads[CypherResult] = (
+		(__ \ "columns").read(Reads.seq[String]) and
+		(__ \ "data").read(Reads.seq[CypherStatementResult])
+	) apply (CypherResult.apply _)
+
+	implicit val cypherResponseReader: Reads[CypherResponse] = (
+		(__ \ "results").read(Reads.seq[CypherResult]) and
+		(__ \ "errors").read(Reads.seq[CypherError])
+	) apply (CypherResponse.apply _)
 
 	val url = "http://localhost:7474/db/data/transaction/commit"
 	val backend = WS.url(url)
@@ -73,9 +69,8 @@ object Cypher {
 			if (response.status != 200) {
 				throw new Exception("Neo4j server answered : " + response.status + " - " + response.statusText)
 			} else {
-				val json: JsValue = response.json
-				json.validate[CypherResponse] match {
-					case s: JsSuccess[CypherResponse] => checkNoErrors(s.get)
+				cypherResponseReader.reads(response.json) match {
+					case JsSuccess(response, _) => checkNoErrors(response)
 					case e: JsError => throw new Exception("Unable to parse CypherResult JSON: " + JsError.toJson(e).toString)
 				}
 			}

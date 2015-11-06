@@ -30,7 +30,7 @@ import org.mindrot.jbcrypt.{BCrypt}
 class Auth extends CommonController {
  
   val signinForm = Form (
-    tuple  (
+    tuple (
       "username" ->  text.verifying(Json.obj("key" -> "form_error_mandatory", "params" -> Json.obj("field" -> "username")).toString, !_.trim.isEmpty),
       "password" -> longPassword
     )
