@@ -17,17 +17,16 @@ object CategoryRepo {
 		val statement = "MATCH (n {uuid: {uuid}}) RETURN n"
 		val parameters = Json.obj("uuid" -> uuid)
 		Cypher.execute(statement, parameters) map { result =>
-			result.statements match {
-				case head :: _ =>
-					val resultItem = head.rows(0)
-					val name = (resultItem \ "name").as[String]
+			result.elements match {
+				case elem :: Nil =>
+					val name = (elem._2 \ "name").as[String]
 					Some(Category(uuid, name))
 				case nil => None
 			}
 		}
 	}
 
-	def create(name: String): Future[CypherResult] = {
+	def create(name: String): Future[CypherStatementResult] = {
 		val statement = "CREATE (n:Category {name: {name}, uuid: {uuid}}) RETURN n"
 		val parameters = Json.obj(
 			"uuid" -> UUID.randomUUID,
