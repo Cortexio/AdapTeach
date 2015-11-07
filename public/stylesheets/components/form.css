@@ -31,7 +31,8 @@ form input {
   font-size: 1.2rem;
   padding: 1rem 1rem;
   width: 100%;
-  border: none; }
+  border: none;
+  color: #28406c; }
   form input:focus {
     outline: none; }
   form input.error {
@@ -47,3 +48,21 @@ form input {
     background-color: #FFBC63; }
     form input[type=submit]:active {
       background-color: #FDB351; }
+
+form .autocomplete {
+  position: relative; }
+  form .autocomplete input:focus ~ .autocomplete-container {
+    display: block; }
+  form .autocomplete .autocomplete-container {
+    background-color: #FFFFFF;
+    position: absolute;
+    width: 100%;
+    display: none; }
+    form .autocomplete .autocomplete-container ul {
+      color: #28406c; }
+      form .autocomplete .autocomplete-container ul li {
+        padding: 1rem;
+        border-bottom: 1px solid #EFEFEF;
+        cursor: pointer; }
+        form .autocomplete .autocomplete-container ul li:hover {
+          background-color: #F4F9FF; }

@@ -1,6 +1,7 @@
 export default {
   FIELDS : {
-    INPUT: "input"
+    INPUT: "input",
+    AUTOCOMPLETE: "autocomplete"
   },
 
   FIELD : {
@@ -9,7 +10,8 @@ export default {
     PLACEHOLDER: "placeholder",
     NAME: "name",
     MANDATORY: "mandatory",
-    AUTOCOMPLETE: "autocomplete",
+    HTML_COMPLETION: "html_completion",
+    ENTRIES: "entries",
     STYLE: "style",
     HALF_SIZE: "half",
     POSITION: {

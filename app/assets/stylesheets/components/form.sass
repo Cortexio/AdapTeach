@@ -39,6 +39,7 @@ form
     padding: 1rem 1rem
     width: 100%
     border: none
+    color: $dark-blue
 
     &:focus
       outline: none
@@ -59,3 +60,23 @@ form
       
       &:active
         background-color: $orange
+
+  .autocomplete
+    position: relative
+    
+    input:focus ~ .autocomplete-container
+      display: block
+
+    .autocomplete-container
+      background-color: $white
+      position: absolute
+      width: 100%
+      display: none
+      ul
+        color: $dark-blue
+        li
+          padding: 1rem
+          border-bottom: 1px solid $light-grey
+          cursor: pointer
+          &:hover
+            background-color: $sky-blue

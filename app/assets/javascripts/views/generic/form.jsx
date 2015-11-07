@@ -33,13 +33,12 @@ function formInitialState() {
       errors: initErrors.bind(this)(),
       formData: 
         this.props.fields.map((field, index) => {
-          let obj = {}
-          obj[field[FCST.FIELD.NAME]] = 
+          let obj = json.tupled({}, field[FCST.FIELD.NAME], 
             {
               name: field[FCST.FIELD.NAME], 
               element: field[FCST.FIELD.ELEMENT], 
               mandatory: field[FCST.FIELD.MANDATORY],
-              autocomplete: field[FCST.FIELD.AUTOCOMPLETE] !== undefined ? field[FCST.FIELD.AUTOCOMPLETE] ? 'on' : 'off' : 'on',
+              autocomplete: field[FCST.FIELD.HTML_COMPLETION] !== undefined ? field[FCST.FIELD.HTML_COMPLETION] ? 'on' : 'off' : 'on',
               half: field[FCST.FIELD.HALF_SIZE],
               style: field[FCST.FIELD.STYLE] || '',
               type: field[FCST.FIELD.TYPE],
@@ -47,7 +46,8 @@ function formInitialState() {
               onchange: field[FCST.FIELD.ONCHANGE],
               onblur: field[FCST.FIELD.ONBLUR],
               value: null
-            }
+            })
+          if(field[FCST.FIELD.ELEMENT] == FCST.FIELDS.AUTOCOMPLETE) json.tupled(obj[field[FCST.FIELD.NAME]], 'entries', field[FCST.FIELD.ENTRIES])
           return obj
         }).reduce((acc, field) => {
           return json.extend(acc, field)
@@ -70,6 +70,7 @@ export default React.createClass({
     let fields = this.props.fields.map((field, index) => {
       switch(field.element) {
         case FCST.FIELDS.INPUT : return this.renderInput(this.state.formData[field[FCST.FIELD.NAME]])
+        case FCST.FIELDS.AUTOCOMPLETE : return this.renderAutocomplete(this.state.formData[field[FCST.FIELD.NAME]])
         default : console.log(field)
       }
     })
@@ -94,6 +95,32 @@ export default React.createClass({
           placeholder={field.placeholder} name={field.name} 
           onBlur={this._handleBlur.bind(null, field)}
           onChange={this._handleChange.bind(null, field)} />
+        <p id={field.name} className="feedback">{fieldErrors.length > 0 ? fieldErrors[0].value : ''}</p>
+      </div>
+    )
+  },
+
+  renderAutocomplete(field) {
+    let fieldErrors = this.state.errors[field.name]
+
+    let entries = field.entries.map((entry, index) => {
+      return <li id={entry.key}>{entry.value}</li>
+    })
+
+    return (
+      <div key={field.name} className={'autocomplete'} >
+        <input type={field.type} autoComplete="off"
+          className={field.style || ''}
+          placeholder={field.placeholder} name={field.name} 
+          onBlur={this._handleBlur.bind(null, field)}
+          onChange={this._handleChange.bind(null, field)} />
+
+          <div className="autocomplete-container">
+            <ul>
+              {entries}
+            </ul>
+          </div>
+
         <p id={field.name} className="feedback">{fieldErrors.length > 0 ? fieldErrors[0].value : ''}</p>
       </div>
     )

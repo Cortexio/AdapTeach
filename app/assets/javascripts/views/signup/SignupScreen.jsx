@@ -10,7 +10,7 @@ export default React.createClass({
 
   render() {
     return (
-      <div className="signup">
+      <div className="signup" style={{margin: 'auto', width: '500px'}}>
         <Form 
           method="POST"
           fields={this._signupFields()}
@@ -22,15 +22,36 @@ export default React.createClass({
 
   _signupFields() {
     let firstname = {}
-    json.tupled(firstname, FCST.FIELD.ELEMENT, 'input')
+    json.tupled(firstname, FCST.FIELD.ELEMENT, FCST.FIELDS.INPUT)
     json.tupled(firstname, FCST.FIELD.TYPE, 'text')
     json.tupled(firstname, FCST.FIELD.PLACEHOLDER, i18n.t('authentication_placeholder_firstname'))
     json.tupled(firstname, FCST.FIELD.NAME, 'firstname')
     json.tupled(firstname, FCST.FIELD.MANDATORY, true)
     json.tupled(firstname, FCST.FIELD.HALF_SIZE, FCST.FIELD.POSITION.LEFT)
 
+    let test = {}
+    json.tupled(test, FCST.FIELD.ELEMENT, FCST.FIELDS.AUTOCOMPLETE)
+    json.tupled(test, FCST.FIELD.TYPE, 'text')
+    json.tupled(test, FCST.FIELD.PLACEHOLDER, 'test')
+    json.tupled(test, FCST.FIELD.NAME, 'test')
+    json.tupled(test, FCST.FIELD.MANDATORY, true)
+    json.tupled(test, FCST.FIELD.ENTRIES, [
+      {key: 'key1', value: 'value1'},
+      {key: 'key2', value: 'value2'},
+      {key: 'key3', value: 'value3'},
+      {key: 'key4', value: 'value4'},
+      {key: 'key5', value: 'value5'},
+      {key: 'key6', value: 'value6'},
+      {key: 'key7', value: 'value7'},
+      {key: 'key8', value: 'value8'},
+      {key: 'key9', value: 'value9'},
+      {key: 'key10', value:  'value10'},
+      {key: 'key11', value:  'value11'},
+      {key: 'key12', value:  'value12'}
+    ])
+
     let lastname = {}
-    json.tupled(lastname, FCST.FIELD.ELEMENT, 'input')
+    json.tupled(lastname, FCST.FIELD.ELEMENT, FCST.FIELDS.INPUT)
     json.tupled(lastname, FCST.FIELD.TYPE, 'text')
     json.tupled(lastname, FCST.FIELD.PLACEHOLDER, i18n.t('authentication_placeholder_lastname'))
     json.tupled(lastname, FCST.FIELD.NAME, 'lastname')
@@ -38,7 +59,7 @@ export default React.createClass({
     json.tupled(lastname, FCST.FIELD.HALF_SIZE, FCST.FIELD.POSITION.RIGHT)
 
     let email = {}
-    json.tupled(email, FCST.FIELD.ELEMENT, 'input')
+    json.tupled(email, FCST.FIELD.ELEMENT, FCST.FIELDS.INPUT)
     json.tupled(email, FCST.FIELD.TYPE, 'email')
     json.tupled(email, FCST.FIELD.PLACEHOLDER, i18n.t('authentication_placeholder_email'))
     json.tupled(email, FCST.FIELD.NAME, 'email')
@@ -47,7 +68,7 @@ export default React.createClass({
     json.tupled(email, FCST.FIELD.AUTOCOMPLETE, false)
 
     let username = {}
-    json.tupled(username, FCST.FIELD.ELEMENT, 'input')
+    json.tupled(username, FCST.FIELD.ELEMENT, FCST.FIELDS.INPUT)
     json.tupled(username, FCST.FIELD.TYPE, 'text')
     json.tupled(username, FCST.FIELD.PLACEHOLDER, i18n.t('authentication_placeholder_username'))
     json.tupled(username, FCST.FIELD.NAME, 'username')
@@ -56,14 +77,14 @@ export default React.createClass({
     json.tupled(username, FCST.FIELD.AUTOCOMPLETE, false)
 
     let password = {}
-    json.tupled(password, FCST.FIELD.ELEMENT, 'input')
+    json.tupled(password, FCST.FIELD.ELEMENT, FCST.FIELDS.INPUT)
     json.tupled(password, FCST.FIELD.TYPE, 'password')
     json.tupled(password, FCST.FIELD.PLACEHOLDER, i18n.t('authentication_placeholder_password'))
     json.tupled(password, FCST.FIELD.NAME, 'password')
     json.tupled(password, FCST.FIELD.MANDATORY, true)
 
     return(
-      [firstname, lastname, email, username, password]
+      [firstname, lastname, email, username, password, test]
     )
   },
 
