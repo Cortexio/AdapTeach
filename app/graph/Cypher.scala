@@ -50,17 +50,17 @@ object Cypher {
 	implicit val cypherResultReads: Reads[Neo4jResult] = (
 		(__ \ "columns").read[Seq[String]] and
 		(__ \ "data").read[Seq[Neo4jResultElement]]
-	)(Neo4jResult.apply _)
+	)(Neo4jResult)
 
 	implicit val cypherErrorReads: Reads[Neo4jError] = (
 		(__ \ "code").read[String] and
 		(__ \ "message").read[String]
-	)(Neo4jError.apply _)
+	)(Neo4jError)
 
 	implicit val cypherResponseReads: Reads[Neo4jResponse] = (
 		(__ \ "results").read[Seq[Neo4jResult]] and
 		(__ \ "errors").read[Seq[Neo4jError]]
-	)(Neo4jResponse.apply _)
+	)(Neo4jResponse)
 
 	val url = "http://localhost:7474/db/data/transaction/commit"
 	val backend = WS.url(url)

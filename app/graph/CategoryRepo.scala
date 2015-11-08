@@ -1,5 +1,9 @@
 package graph
 
+import play.api.libs.json._
+import play.api.libs.json.Reads._
+import play.api.libs.functional.syntax._
+
 import java.util.UUID
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -9,9 +13,10 @@ import models.Category
 
 object CategoryRepo {
 
-//	implicit val fromCypher: CypherResultItem => Category = (resultItem) => {
-//			Category("uuid", "Fake Category")
-//	}
+	implicit val categoryReads: Reads[Category] = (
+		(__ \ "uuid").read[String] and
+		(__ \ "name").read[String]
+	)(Category)
 
 	def find(uuid: String): Future[Option[Category]] = {
 		val statement = "MATCH (n {uuid: {uuid}}) RETURN n"
@@ -20,20 +25,21 @@ object CategoryRepo {
 			result.elements match {
 				case elem :: Nil =>
 					val node = elem("n")
-					val name = (node \ "name").as[String] // TODO Use a Reads
-					Some(Category(uuid, name))
+					Some(node.as[Category])
 				case nil => None
 			}
 		}
 	}
 
-	def create(name: String): Future[CypherStatementResult] = {
+	def create(name: String): Future[Category] = {
 		val statement = "CREATE (n:Category {name: {name}, uuid: {uuid}}) RETURN n"
 		val parameters = Json.obj(
 			"uuid" -> UUID.randomUUID,
 			"name" -> name
 		)
-		Cypher.execute(statement, parameters)
+		Cypher.execute(statement, parameters) map { result =>
+			result.elements(0)("n").as[Category]
+		}
 	}
 	
 }
