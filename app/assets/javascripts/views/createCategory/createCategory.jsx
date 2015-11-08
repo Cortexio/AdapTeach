@@ -1,12 +1,13 @@
 import React from 'react'
 
-var formCreateCategory = React.createClass({
+var createCategory = React.createClass({
 	render(){
-		<div classname="component">
-			<form method="post" action"#" /*modify acion*/>
+		return (
+			<div classname="component">
+				<form method="post" action"/formCreateCategory">
 					<h3>Create a category</h3>
 					<input type="text" name="name" id="name" value="name"/>
-					<select name="pays"> 
+					<select name="choixRattachement"> 
 						<option value="Parent Category" selected="selected">Parent Category </option>
 						<option value="Cat1">Cat1 </option>
 						<option value="Cat2">Cat2 </option>
@@ -18,7 +19,8 @@ var formCreateCategory = React.createClass({
 					</select>
 				</form>
 			</div>
+		)
 	}
 });
 
-export default formCreateCategory;
+export default createCategory;
