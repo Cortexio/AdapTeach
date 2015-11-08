@@ -19,7 +19,8 @@ object CategoryRepo {
 		Cypher.execute(statement, parameters) map { result =>
 			result.elements match {
 				case elem :: Nil =>
-					val name = (elem._2 \ "name").as[String]
+					val node = elem("n")
+					val name = (node \ "name").as[String] // TODO Use a Reads
 					Some(Category(uuid, name))
 				case nil => None
 			}

@@ -18,10 +18,11 @@ case class Neo4jResult (
 	data: Seq[Neo4jResultElement]
 ) {
 	def asCypherResult: CypherStatementResult = {
-		val elements = for {
-			element <- data
-			i <- 0 until columns.size
-		} yield (columns(i), element.row(i))
+		val elements = data map { jsonElem =>
+			val tupledElem: Seq[Tuple2[String, JsValue]] =
+				for (i <- 0 until columns.size) yield (columns(i), jsonElem.row(i))
+			tupledElem toMap
+		}
 		CypherStatementResult(elements)
 	}
 }
@@ -36,7 +37,7 @@ case class Neo4jError (
 )
 
 case class CypherStatementResult(
-	elements: Seq[Tuple2[String, JsValue]]
+	elements: Seq[Map[String, JsValue]]
 )
 
 object Cypher {
