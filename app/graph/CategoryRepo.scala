@@ -13,10 +13,7 @@ import models.Category
 
 object CategoryRepo {
 
-	implicit val categoryReads: Reads[Category] = (
-		(__ \ "uuid").read[String] and
-		(__ \ "name").read[String]
-	)(Category)
+	implicit val categoryReads: Reads[Category] = Json.reads[Category]
 
 	def find(uuid: String): Future[Option[Category]] = {
 		val statement = "MATCH (n {uuid: {uuid}}) RETURN n"

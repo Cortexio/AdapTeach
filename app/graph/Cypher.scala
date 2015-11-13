@@ -44,23 +44,13 @@ object Cypher {
 
 	implicit val context = play.api.libs.concurrent.Execution.Implicits.defaultContext
 
-	implicit val cypherResultDataReads: Reads[Neo4jResultElement] =
-		Json.reads[Neo4jResultElement] <~ (__ \ "row").read(Reads.seq[JsValue])
+	implicit val cypherResultDataReads: Reads[Neo4jResultElement] = Json.reads[Neo4jResultElement]
 
-	implicit val cypherResultReads: Reads[Neo4jResult] = (
-		(__ \ "columns").read[Seq[String]] and
-		(__ \ "data").read[Seq[Neo4jResultElement]]
-	)(Neo4jResult)
+	implicit val cypherResultReads: Reads[Neo4jResult] = Json.reads[Neo4jResult]
 
-	implicit val cypherErrorReads: Reads[Neo4jError] = (
-		(__ \ "code").read[String] and
-		(__ \ "message").read[String]
-	)(Neo4jError)
+	implicit val cypherErrorReads: Reads[Neo4jError] = Json.reads[Neo4jError]
 
-	implicit val cypherResponseReads: Reads[Neo4jResponse] = (
-		(__ \ "results").read[Seq[Neo4jResult]] and
-		(__ \ "errors").read[Seq[Neo4jError]]
-	)(Neo4jResponse)
+	implicit val cypherResponseReads: Reads[Neo4jResponse] = Json.reads[Neo4jResponse]
 
 	val url = "http://localhost:7474/db/data/transaction/commit"
 	val backend = WS.url(url)
