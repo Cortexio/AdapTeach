@@ -18,7 +18,7 @@ case class Neo4jResult (
 	data: Seq[Neo4jResultElement]
 ) {
 	def asCypherResult: CypherStatementResult = {
-		val elements = data map { jsonElem =>
+		val elements: Seq[Map[String, JsValue]] = data map { jsonElem =>
 			val tupledElem: Seq[Tuple2[String, JsValue]] =
 				for (i <- 0 until columns.size) yield (columns(i), jsonElem.row(i))
 			tupledElem toMap

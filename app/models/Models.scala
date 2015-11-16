@@ -65,23 +65,6 @@ object User {
 	}
 }
 
-
-
-case class Objective (
-  id: String,
-  title: String,
-  summary: String,
-  children: Seq[Objective]
-)
-
-case class Item (
-  id: String,
-  title: String,
-  summary: Option[String],
-  parentCategory: Category,
-  parentObjectives: Seq[Objective]
-)
-
 case class Preq (
   id: String,
   mandatory: Boolean,

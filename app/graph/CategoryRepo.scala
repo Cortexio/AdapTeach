@@ -10,10 +10,9 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import play.api.libs.json._
 
 import models.Category
+import models.Formats._
 
 object CategoryRepo {
-
-	implicit val categoryReads: Reads[Category] = Json.reads[Category]
 
 	def find(uuid: String): Future[Option[Category]] = {
 		val statement = "MATCH (n {uuid: {uuid}}) RETURN n"
