@@ -1,11 +1,11 @@
 package core
 
-import core.actions._
+import core.commands._
 
-object ActionHandler {
+object CommandHandler {
 
-	def handle(action: Action): Result = action match {
-		case a: CreateItem => Result("123")
+	def handle(command: Command): Result = command match {
+		case c: CreateItem => Result("123")
 		case _ => Result("0")
 	}
 

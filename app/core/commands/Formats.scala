@@ -1,4 +1,4 @@
-package core.actions
+package core.commands
 
 import play.api.libs.json._
 

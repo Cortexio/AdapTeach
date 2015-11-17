@@ -1,9 +1,9 @@
-package core.actions
+package core.commands
 
-import core.Action
+import core.Command
 
 case class CreateItem (
 	name: String,
 	description: String,
 	categoryId: String
-) extends Action
+) extends Command

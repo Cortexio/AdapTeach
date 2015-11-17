@@ -10,8 +10,8 @@ import play.api.libs.json.Json.toJson
 import graph.ItemRepo
 import models.Item
 import models.Formats._
-import core.actions.CreateItem
-import core.actions.Formats._
+import core.commands.CreateItem
+import core.commands.Formats._
 
 class ItemCtrl extends Controller {
 

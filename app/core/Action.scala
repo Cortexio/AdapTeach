@@ -1,3 +1,3 @@
 package core
 
-trait Action {}
+trait Command {}

@@ -6,7 +6,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import play.api.libs.json._
 
 import models._
-import core.actions.CreateItem
+import core.commands.CreateItem
 import models.Formats._
 
 object ItemRepo {
