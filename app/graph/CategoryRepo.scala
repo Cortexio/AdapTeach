@@ -7,7 +7,6 @@ import play.api.libs.functional.syntax._
 import java.util.UUID
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
-import play.api.libs.json._
 
 import models.Category
 import models.Formats._
@@ -28,7 +27,7 @@ object CategoryRepo {
 	}
 
 	def create(name: String): Future[Category] = {
-		val statement = "CREATE (n:Category {name: {name}, uuid: {uuid}}) RETURN n"
+		val statement = "CREATE (n:Category {uuid: {uuid}, name: {name}}) RETURN n"
 		val parameters = Json.obj(
 			"uuid" -> UUID.randomUUID,
 			"name" -> name

@@ -3,6 +3,6 @@ package models
 case class Item (
   uuid: String,
   name: String,
-  description: Option[String],
+  description: String,
   category: Category
-) extends Objective(uuid, name, description)
+)

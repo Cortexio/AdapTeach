@@ -17,8 +17,10 @@ class ItemCtrl extends Controller {
 
 	def create() = Action.async(parse.json) { request =>
 		val action = request.body.as[CreateItem]
-		ItemRepo.create(action) map { createdItem =>
-			Ok(toJson(createdItem))
+		ItemRepo.create(action) map {
+			createdItem => Ok(toJson(createdItem))
+		} recover {
+			case e: Exception => NotFound(e.getMessage)
 		}
 	}
 	

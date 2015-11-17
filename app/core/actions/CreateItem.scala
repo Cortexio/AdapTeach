@@ -1,7 +1,9 @@
 package core.actions
 
+import core.Action
+
 case class CreateItem (
 	name: String,
-	description: Option[String],
+	description: String,
 	categoryId: String
-)
+) extends Action
