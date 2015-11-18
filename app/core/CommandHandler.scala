@@ -1,12 +1,10 @@
 package core
 
-import core.commands._
+import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
 
-object CommandHandler {
+trait CommandHandler[C <: Command, O <: Outcome[C]] {
 
-	//def handle(command: Command): Outcome = command match {
-	//	case c: CreateItem => Outcome("123")
-	//	case _ => Outcome("0")
-	//}
+	def handle(command: C): Future[O]
 
 }

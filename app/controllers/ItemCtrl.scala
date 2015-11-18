@@ -10,16 +10,20 @@ import play.api.libs.json.Json.toJson
 import graph.ItemRepo
 import models.Item
 import models.Formats._
+import core.CommandHandlers.handle
 import core.commands.CreateItem
+import core.commands.CreateItemOutcome
 import core.exceptions.EntityNotFound
 import controllers.json.CommandFormats._
+
+import core.commands.CreateItemHandler._
 
 class ItemCtrl extends Controller {
 
 	def create() = Action.async(parse.json) { request =>
 		val command = request.body.as[CreateItem]
-		command.handle map {
-			outcome => Ok(toJson(outcome.createdItem))
+		handle(command) map {
+			outcome: CreateItemOutcome => Ok(toJson(outcome.createdItem))
 		} recover {
 			case e: EntityNotFound => NotFound(e.getMessage)
 		}

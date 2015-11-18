@@ -1,3 +1,3 @@
 package core
 
-trait Outcome {}
+class Outcome[C <: Command]
