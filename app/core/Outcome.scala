@@ -1,0 +1,3 @@
+package core
+
+trait Outcome {}

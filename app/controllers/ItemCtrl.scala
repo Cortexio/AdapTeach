@@ -11,16 +11,17 @@ import graph.ItemRepo
 import models.Item
 import models.Formats._
 import core.commands.CreateItem
-import core.commands.Formats._
+import core.exceptions.EntityNotFound
+import controllers.json.CommandFormats._
 
 class ItemCtrl extends Controller {
 
 	def create() = Action.async(parse.json) { request =>
-		val action = request.body.as[CreateItem]
-		ItemRepo.create(action) map {
-			createdItem => Ok(toJson(createdItem))
+		val command = request.body.as[CreateItem]
+		command.handle map {
+			outcome => Ok(toJson(outcome.createdItem))
 		} recover {
-			case e: Exception => NotFound(e.getMessage)
+			case e: EntityNotFound => NotFound(e.getMessage)
 		}
 	}
 	
