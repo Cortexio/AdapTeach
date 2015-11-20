@@ -2,8 +2,7 @@ package controllers.json
 
 import play.api.libs.json._
 
-import core.commands._
-import core.Outcome
+import core.commands.CreateItem._
 
 import controllers.json.ModelFormats._
 

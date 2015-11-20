@@ -1,4 +1,4 @@
-package core
+package core.common
 
 import scala.concurrent.Future
 

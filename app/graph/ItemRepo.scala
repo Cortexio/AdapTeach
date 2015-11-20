@@ -6,7 +6,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import play.api.libs.json._
 
 import models._
-import core.commands.CreateItem
+import core.commands.CreateItem._
 import core.exceptions.EntityNotFound
 import models.Formats._
 
