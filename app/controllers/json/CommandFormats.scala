@@ -2,16 +2,17 @@ package controllers.json
 
 import play.api.libs.json._
 
+import core.commands.CreateCategory._
 import core.commands.CreateItem._
 
 import controllers.json.ModelFormats._
 
 object CommandFormats {
 
-	implicit val createItemWrites: Writes[CreateItem] = Json.writes[CreateItem]
-	implicit val createItemReads: Reads[CreateItem] = Json.reads[CreateItem]
+	implicit val createCategory = Json.format[CreateCategory]
+	implicit val createCategoryOutcome = Json.format[CreateCategoryOutcome]
 
-	implicit val createItemOutcomeWrites: Writes[CreateItemOutcome] = Json.writes[CreateItemOutcome]
-	implicit val createItemOutcomeReads: Reads[CreateItemOutcome] = Json.reads[CreateItemOutcome]
+	implicit val createItem = Json.format[CreateItem]
+	implicit val createItemOutcome = Json.format[CreateItemOutcome]
 
 }

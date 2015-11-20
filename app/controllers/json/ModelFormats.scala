@@ -6,10 +6,10 @@ import models._
 
 object ModelFormats {
 
-	implicit val categoryWrites: Writes[Category] = Json.writes[Category]
-	implicit val categoryReads: Reads[Category] = Json.reads[Category]
+	implicit val category = Json.format[Category]
 	
-	implicit val itemWrites: Writes[Item] = Json.writes[Item]
-	implicit val itemReads: Reads[Item] = Json.reads[Item]
+	implicit val item = Json.format[Item]
+
+	implicit val objective = Json.format[Objective]
 
 }

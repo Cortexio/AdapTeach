@@ -7,15 +7,18 @@ import play.api.mvc._
 import play.api.mvc.BodyParsers.parse
 import play.api.libs.json.Json.toJson
 
+import core.common._
+import core.commands.CreateCategory._
 import graph.CategoryRepo
 import models.Category
 import models.Formats._
+import controllers.json.CommandFormats._
 
 class CategoryCtrl extends Controller {
 
 	def create() = Action.async(parse.json) { request =>
-		CategoryRepo.create((request.body \ "name").as[String]) map { createdCategory =>
-			Ok(toJson(createdCategory))
+		App.execute(request.body.as[CreateCategory]) map {
+			outcome => Ok(toJson(outcome.createdCategory))
 		}
 	}
 

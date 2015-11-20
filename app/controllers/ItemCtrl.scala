@@ -20,7 +20,7 @@ class ItemCtrl extends Controller {
 	def create() = Action.async(parse.json) { request =>
 		val command = request.body.as[CreateItem]
 		execute(command) map {
-			outcome: CreateItemOutcome => Ok(toJson(outcome.createdItem))
+			outcome => Ok(toJson(outcome.createdItem))
 		} recover {
 			case e: EntityNotFound => NotFound(e.getMessage)
 		}
