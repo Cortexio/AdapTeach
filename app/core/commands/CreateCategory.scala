@@ -17,11 +17,10 @@ object CreateCategory {
 		createdCategory: Category
 	) extends Outcome[CreateCategory]
 
-	implicit object Handler extends CommandHandler[CreateCategory, CreateCategoryOutcome] {
-		def handle(command: CreateCategory) = {
-			CategoryRepo.create(command.name) map { createdCategory =>
-				CreateCategoryOutcome(createdCategory)
-			}
+	implicit val handler = Command.handler( (command: CreateCategory) => {
+		CategoryRepo.create(command.name) map { createdCategory =>
+			CreateCategoryOutcome(createdCategory)
 		}
-	}
+	})
+
 }

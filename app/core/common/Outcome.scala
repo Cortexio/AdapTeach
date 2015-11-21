@@ -1,3 +1,3 @@
 package core.common
 
-class Outcome[C <: Command]
+trait Outcome[C <: Command]

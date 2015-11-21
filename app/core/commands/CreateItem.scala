@@ -22,21 +22,15 @@ object CreateItem {
 		createdItem: Item
 		) extends Outcome[CreateItem]
 
-	implicit object Handler extends CommandHandler[CreateItem, CreateItemOutcome] {
-		def handle(c: CreateItem) = {
-			ItemRepo.create(c) map {
-				createdItem => CreateItemOutcome(createdItem)
-			}
+	implicit val handler = Command.handler( (command: CreateItem) => {
+		ItemRepo.create(command) map {
+			createdItem => CreateItemOutcome(createdItem)
 		}
-	}
+	})
 
-	trait Filter[N <: Layer] extends CommandFilter[N, CreateItem]
-
-	implicit object Validation extends Filter[Layers.Validation] {
-		def filter(c: CreateItem) = {
-			if (c.name.length < 2) throw new Exception("Validation Failed")
-			pass(c)
-		}
-	}
+	implicit val validation = Layers.Validation.filter( (command: CreateItem) => {
+		if (command.name.length < 2) throw new Exception("Validation Failed")
+		Future(command)
+	})
 
 }
