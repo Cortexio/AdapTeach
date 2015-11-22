@@ -3,7 +3,7 @@ package core.common
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
-import core.common.Layers._
+import core.common.Layer._
 
 object App {
 

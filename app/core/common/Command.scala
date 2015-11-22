@@ -10,4 +10,8 @@ object Command {
 		def handle(command: C) = f(command)
 	}
 
+	def filter[L <: Layer, C <: Command](f: C => Future[C]) = new CommandFilter[L, C] {
+		def filter(command: C) = f(command)
+	}
+
 }

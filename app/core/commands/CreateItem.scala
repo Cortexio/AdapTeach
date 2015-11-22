@@ -22,13 +22,13 @@ object CreateItem {
 		createdItem: Item
 		) extends Outcome[CreateItem]
 
-	implicit val handler = Command.handler( (command: CreateItem) => {
+	implicit val handler = Command.handler[CreateItem, CreateItemOutcome]( (command) => {
 		ItemRepo.create(command) map {
 			createdItem => CreateItemOutcome(createdItem)
 		}
 	})
 
-	implicit val validation = Layers.Validation.filter( (command: CreateItem) => {
+	implicit val validation = Command.filter[Layer.Validation, CreateItem]( (command) => {
 		if (command.name.length < 2) throw new Exception("Validation Failed")
 		Future(command)
 	})
