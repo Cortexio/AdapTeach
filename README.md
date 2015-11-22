@@ -121,10 +121,10 @@ i18n.t("translation_key", {smart_count: 2});
 - - - -
 
 > SPECIFIC SERVER CASE  
-If you wanna create a message on the server side and use the i18n engine from the client, you have to follow these instructions:
+If you want to create a message on the server side and use the i18n engine from the client, you have to follow these instructions:
 Create your translation in the `messages_<locale>.json`
 >> On the server side, your message must have the following structure
-```sh
+```
 {
   key: "translation_key",
   params: {
@@ -134,8 +134,46 @@ Create your translation in the `messages_<locale>.json`
 ```
 `KEY` and `PARAMS` are keywords here. You must use it. the other keys are completely your call.
 >> you will have this kind of source code to do this (exemple of a json response in scala Action)
-```sh
+```scala
 Ok(Json.obj("any_key" -> Json.obj("key" -> "translation_key", "params" -> Json.obj("param_key" -> "param value")).stringify))
 ```
 In this case, `param_key` is a variable corresponding to the var you set in the translation message like `smart_count` (ref to the pluralization exemple)  
-If you wanna render a global error in a form, use the param_key `global` instead of `any_key`; which is a random choice just for the exemple in this case; and the error will automatically render just under the submit button.
+If you want to render a global error in a form, use the param_key `global` instead of `any_key`; which is a random choice just for the exemple in this case; and the error will automatically render just under the submit button.
+
+### Core Application Architecture
+The server-side application is centered around a pure Scala, framework-agnostic core App object. The core App does only one thing : it executes Commands.
+```scala
+App.execute(command)
+```
+A Command represents a single action that can be performed on the system. Typically, on the REST API, every route is associated to a single Command :
+```scala
+val command = request.body.as[CreateItem]
+App.execute(command)
+```
+Executing a Command results in a Future[Outcome] :
+```scala
+val command = request.body.as[CreateItem]
+App.execute(command) map {
+	outcome: CreateItemOutcome => Ok(toJson(outcome.createdItem))
+}
+```
+Creating a new type of Command and associated Outcome is very simple. Just inherit the traits :
+```scala
+case class DoSomething () extends Command
+case class DoSomethingOutcome () extends Outcome[DoSomething]
+```
+Now, if your try to execute this command, you'll get a compilation error. That's because the core App object expects you to provide an implicit CommandHandler. To create one, just use the helper function :
+```scala
+implicit val handler = Command.handler( (command: DoSomething) => {
+	// Do Something... or not
+	Future(DoSomethingOutcome())
+})
+```
+##### Filter Layers
+Before being handed to the handler, a Command is passed through several layers of safety checks, namely Validation, Security and Consistency. If you wish to, you can provide an implicit CommandFilter for a specific Command and Layer :
+```scala
+implicit val filter = Command.filter[Layer.Validation, CreateItem]( (command) => {
+	// Throw validation error if necessary
+	Future(command)
+})
+```

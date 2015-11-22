@@ -20,7 +20,7 @@ object CreateItem {
 
 	case class CreateItemOutcome (
 		createdItem: Item
-		) extends Outcome[CreateItem]
+	) extends Outcome[CreateItem]
 
 	implicit val handler = Command.handler[CreateItem, CreateItemOutcome]( (command) => {
 		ItemRepo.create(command) map {
