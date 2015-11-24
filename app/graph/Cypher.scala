@@ -18,12 +18,12 @@ case class Neo4jResult (
 	data: Seq[Neo4jResultElement]
 ) {
 	def asCypherResult: CypherStatementResult = {
-		val elements: Seq[Map[String, JsValue]] = data map { jsonElem =>
+		val rows: Seq[Map[String, JsValue]] = data map { jsonElem =>
 			val tupledElem: Seq[Tuple2[String, JsValue]] =
 				for (i <- 0 until columns.size) yield (columns(i), jsonElem.row(i))
 			tupledElem toMap
 		}
-		CypherStatementResult(elements)
+		CypherStatementResult(rows)
 	}
 }
 
@@ -37,7 +37,7 @@ case class Neo4jError (
 )
 
 case class CypherStatementResult(
-	elements: Seq[Map[String, JsValue]]
+	rows: Seq[Map[String, JsValue]]
 )
 
 object Cypher {
@@ -56,7 +56,7 @@ object Cypher {
 	val backend = WS.url(url)
 									.withAuth("neo4j", "password", WSAuthScheme.BASIC)
 
-	def execute(statement:String, parameters: JsObject): Future[CypherStatementResult] = {
+	def send(statement:String, parameters: JsObject): Future[CypherStatementResult] = {
 
 		val data = Json.obj(
 			"statements" -> Json.arr(
@@ -81,7 +81,7 @@ object Cypher {
 		}
 	}
 
-	def checkNoErrors(response: Neo4jResponse): Neo4jResult = {
+	private def checkNoErrors(response: Neo4jResponse): Neo4jResult = {
 		if (response.errors.nonEmpty) throw new Exception("Neo4j errors : " + response.errors)
 		response.results(0) // Only one statement was sent
 	}

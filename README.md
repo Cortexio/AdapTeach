@@ -159,14 +159,14 @@ App.execute(command) map {
 ```
 Creating a new type of Command and associated Outcome is very simple. Just inherit the traits :
 ```scala
-case class DoSomething () extends Command
-case class DoSomethingOutcome () extends Outcome[DoSomething]
+case class CreateItem () extends Command
+case class CreateItemOutcome () extends Outcome[CreateItem]
 ```
 Now, if your try to execute this command, you'll get a compilation error. That's because the core App object expects you to provide an implicit CommandHandler. To create one, just use the helper function :
 ```scala
-implicit val handler = Command.handler( (command: DoSomething) => {
-	// Do Something... or not
-	Future(DoSomethingOutcome())
+implicit val handler = Command.handler( (command: CreateItem) => {
+	// Create the Item...
+	Future(CreateItemOutcome())
 })
 ```
 ##### Filter Layers
@@ -177,3 +177,38 @@ implicit val filter = Command.filter[Layer.Validation, CreateItem]( (command) =>
 	Future(command)
 })
 ```
+
+### Neo4j
+The project defines its own internal API to communicate with the Neo4j database. Every interaction with Neo4j is done by sending an HTTP request containing a Cypher query. To send a request, use the Cypher.send() function :
+```scala
+val statement = "CREATE (n:Category {uuid: {uuid}, name: {name}})"
+val parameters = Json.obj(
+	"uuid" -> UUID.randomUUID,
+	"name" -> name
+)
+Cypher.send(statement, parameters)
+```
+Statements should always be separated from parameter values :
+ * Queries run faster
+ * It protects from Cypher code injection
+
+Cypher.send() returns a Future[CypherStatementResult]. In turn, a CypherStatementResult is basically a Seq[Map[String, JsValue]]. Let's look at an example :
+```scala
+val statement = "CREATE (n:Category {uuid: {uuid}, name: {name}}) RETURN n"
+val parameters = Json.obj(
+	"uuid" -> UUID.randomUUID,
+	"name" -> name
+)
+Cypher.send(statement, parameters) map { result =>
+	val firstRow: Map[String, JsValue] = result.rows(0)         // 1
+	val createdNode: JsValue = firstRow("n")                    // 2
+	val createdCategory: Category = createdNode.as[Category]    // 3
+}
+```
+(The 3 lines of code in the map block should really be just one line, they are here for explanatory purposes only)
+
+Note that the statement ends with "RETURN n", n being the identifier of the created node in the Cypher query. So in this case, we expect the query to return only one node, the created node, and we can safely assume that result.rows is a Seq of size 1. Had there been a problem with the query, the Future would have failed and the call to map() would have been ignored.
+
+ 1. By calling result.rows(0), we get a Map of all the returned values for the first (and only) match of this query. More frequently, when using the MATCH keyword in Cypher queries (comparable to SQL's SELECT), there can be many result rows for a single statement.
+ 2. This row is a Map, its keys are the identifiers declared after the RETURN clause in the Cypher query. Here, we RETURN only one identifier, "n", so we can call firstRow("n") to get the data for the node referenced by this identifier.
+ 3. Cypher is a flexible language, and it allows multiple types of values after the RETURN clause. Here, we RETURN a node, but we could just as well return a relationship, a number, a boolean... which is why we store row values as JsValue, which can be conveniently converted to the corresponding Scala type (just don't forget to provide an implicit Reads for the target type)

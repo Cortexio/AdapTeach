@@ -16,8 +16,8 @@ object CategoryRepo {
 	def find(uuid: String): Future[Option[Category]] = {
 		val statement = "MATCH (n {uuid: {uuid}}) RETURN n"
 		val parameters = Json.obj("uuid" -> uuid)
-		Cypher.execute(statement, parameters) map { result =>
-			result.elements match {
+		Cypher.send(statement, parameters) map { result =>
+			result.rows match {
 				case elem :: Nil =>
 					val node = elem("n")
 					Some(node.as[Category])
@@ -32,8 +32,8 @@ object CategoryRepo {
 			"uuid" -> UUID.randomUUID,
 			"name" -> name
 		)
-		Cypher.execute(statement, parameters) map { result =>
-			result.elements(0)("n").as[Category]
+		Cypher.send(statement, parameters) map { result =>
+			result.rows(0)("n").as[Category]
 		}
 	}
 	

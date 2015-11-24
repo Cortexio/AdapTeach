@@ -23,10 +23,10 @@ object ItemRepo {
 			"description" -> command.description,
 			"categoryId" -> command.categoryId
 		)
-		Cypher.execute(statement, parameters) map { result =>
-			if (result.elements.isEmpty) throw new EntityNotFound("No Category found for id " + command.categoryId)
-			val objective = result.elements(0)("i").as[Objective]
-			val category = result.elements(0)("c").as[Category]
+		Cypher.send(statement, parameters) map { result =>
+			if (result.rows.isEmpty) throw new EntityNotFound("No Category found for id " + command.categoryId)
+			val objective = result.rows(0)("i").as[Objective]
+			val category = result.rows(0)("c").as[Category]
 			Item(objective.uuid, objective.name, objective.description, category)
 		}
 	}
