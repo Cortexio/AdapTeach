@@ -5,7 +5,7 @@ import play.api.libs.json._
 import core.commands.CreateCategory._
 import core.commands.CreateItem._
 
-import controllers.json.ModelFormats._
+import models.Formats._
 
 object CommandFormats {
 
