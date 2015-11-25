@@ -12,11 +12,25 @@ import models.Formats._
 
 object ItemRepo {
 
+	def find(uuid: String): Future[Option[Item]] = {
+		val statement = "MATCH (o:Objective {uuid: {uuid}}) -[:IN_CATEGORY]-> (c) RETURN o, c"
+		val parameters = Json.obj("uuid" -> uuid)
+		Cypher.send(statement, parameters) map { result =>
+			result.rows match {
+				case row :: Nil =>
+					val objective = row("o").as[Objective]
+					val category = row("c").as[Category]
+					Some(Item(objective.uuid, objective.name, objective.description, category))
+				case nil => None
+			}
+		}
+	}
+
 	def create(command: CreateItem): Future[Item]= {
 		val statement = """
 			MATCH (c:Category {uuid: {categoryId}})
-			CREATE (i:Item {uuid: {uuid}, name: {name}, description: {description}}) -[:IN_CATEGORY]-> (c)
-			RETURN i, c"""
+			CREATE (o:Objective {uuid: {uuid}, name: {name}, description: {description}}) -[:IN_CATEGORY]-> (c)
+			RETURN o, c"""
 		val parameters = Json.obj(
 			"uuid" -> UUID.randomUUID,
 			"name" -> command.name,
@@ -25,7 +39,7 @@ object ItemRepo {
 		)
 		Cypher.send(statement, parameters) map { result =>
 			if (result.rows.isEmpty) throw new EntityNotFound("No Category found for id " + command.categoryId)
-			val objective = result.rows(0)("i").as[Objective]
+			val objective = result.rows(0)("o").as[Objective]
 			val category = result.rows(0)("c").as[Category]
 			Item(objective.uuid, objective.name, objective.description, category)
 		}

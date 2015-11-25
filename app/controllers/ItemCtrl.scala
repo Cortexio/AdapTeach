@@ -12,6 +12,7 @@ import models.Item
 import models.Formats._
 import core.common.App.execute
 import core.commands.CreateItem._
+import core.commands.FindItem._
 import core.exceptions.EntityNotFound
 import controllers.json.CommandFormats._
 
@@ -21,6 +22,14 @@ class ItemCtrl extends Controller {
 		val command = request.body.as[CreateItem]
 		execute(command) map {
 			outcome => Ok(toJson(outcome.createdItem))
+		} recover {
+			case e: EntityNotFound => NotFound(e.getMessage)
+		}
+	}
+
+	def find(uuid: String) = Action.async { request =>
+		execute(FindItem(uuid)) map {
+			outcome => Ok(toJson(outcome.foundItem))
 		} recover {
 			case e: EntityNotFound => NotFound(e.getMessage)
 		}

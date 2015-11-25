@@ -14,12 +14,12 @@ import models.Formats._
 object CategoryRepo {
 
 	def find(uuid: String): Future[Option[Category]] = {
-		val statement = "MATCH (n {uuid: {uuid}}) RETURN n"
+		val statement = "MATCH (c:Category {uuid: {uuid}}) RETURN c"
 		val parameters = Json.obj("uuid" -> uuid)
 		Cypher.send(statement, parameters) map { result =>
 			result.rows match {
 				case elem :: Nil =>
-					val node = elem("n")
+					val node = elem("c")
 					Some(node.as[Category])
 				case nil => None
 			}
@@ -27,13 +27,13 @@ object CategoryRepo {
 	}
 
 	def create(name: String): Future[Category] = {
-		val statement = "CREATE (n:Category {uuid: {uuid}, name: {name}}) RETURN n"
+		val statement = "CREATE (c:Category {uuid: {uuid}, name: {name}}) RETURN c"
 		val parameters = Json.obj(
 			"uuid" -> UUID.randomUUID,
 			"name" -> name
 		)
 		Cypher.send(statement, parameters) map { result =>
-			result.rows(0)("n").as[Category]
+			result.rows(0)("c").as[Category]
 		}
 	}
 	
