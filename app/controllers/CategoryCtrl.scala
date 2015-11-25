@@ -9,6 +9,8 @@ import play.api.libs.json.Json.toJson
 
 import core.common._
 import core.commands.CreateCategory._
+import core.commands.FindCategory._
+import core.exceptions.EntityNotFound
 import graph.CategoryRepo
 import models.Category
 import models.Formats._
@@ -23,11 +25,11 @@ class CategoryCtrl extends Controller {
 	}
 
 	def read(uuid: String) = Action.async { request =>
-		CategoryRepo.find(uuid) map { maybeCategory =>
-			maybeCategory match {
-				case Some(category) => Ok(toJson(category))
-				case None => NotFound("No category found for uuid : " + uuid)
-			}
+		val command = FindCategory(uuid)
+		App.execute(command) map {
+			outcome => Ok(toJson(outcome.foundCategory))
+		} recover {
+			case e: EntityNotFound => NotFound(e.getMessage)
 		}
 	}
 
