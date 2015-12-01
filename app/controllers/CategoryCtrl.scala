@@ -1,12 +1,13 @@
 package controllers
 
-import scala.concurrent._
+import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
 import play.api.mvc._
 import play.api.mvc.BodyParsers.parse
 import play.api.libs.json.Json.toJson
 
+import controllers.common.Endpoint
 import core.common.Core.execute
 import core.commands.CreateCategory._
 import core.commands.FindCategory._
@@ -18,17 +19,15 @@ import controllers.json.CommandFormats._
 
 class CategoryCtrl extends Controller {
 
-	def create() = Action.async(parse.json) { request =>
+	def create() = Endpoint.handle(parse.json) { request =>
 		execute(request.body.as[CreateCategory]) map {
 			outcome => Ok(toJson(outcome.createdCategory))
 		}
 	}
 
-	def find(uuid: String) = Action.async { request =>
+	def find(uuid: String) = Endpoint.handle { request =>
 		execute(FindCategory(uuid)) map {
 			outcome => Ok(toJson(outcome.foundCategory))
-		} recover {
-			case e: EntityNotFound => NotFound(e.getMessage)
 		}
 	}
 

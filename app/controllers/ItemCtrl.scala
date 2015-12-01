@@ -7,6 +7,7 @@ import play.api.mvc._
 import play.api.mvc.BodyParsers.parse
 import play.api.libs.json.Json.toJson
 
+import controllers.common.Endpoint
 import graph.ItemRepo
 import models.Item
 import models.Formats._
@@ -18,20 +19,16 @@ import controllers.json.CommandFormats._
 
 class ItemCtrl extends Controller {
 
-	def create() = Action.async(parse.json) { request =>
+	def create() = Endpoint.handle(parse.json) { request =>
 		val command = request.body.as[CreateItem]
 		execute(command) map {
 			outcome => Ok(toJson(outcome.createdItem))
-		} recover {
-			case e: EntityNotFound => NotFound(e.getMessage)
 		}
 	}
 
-	def find(uuid: String) = Action.async { request =>
+	def find(uuid: String) = Endpoint.handle { request =>
 		execute(FindItem(uuid)) map {
 			outcome => Ok(toJson(outcome.foundItem))
-		} recover {
-			case e: EntityNotFound => NotFound(e.getMessage)
 		}
 	}
 	
