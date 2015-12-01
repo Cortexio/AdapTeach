@@ -7,7 +7,7 @@ import play.api.mvc._
 import play.api.mvc.BodyParsers.parse
 import play.api.libs.json.Json.toJson
 
-import core.common.App.execute
+import core.common.Core.execute
 import core.commands.CreateCategory._
 import core.commands.FindCategory._
 import core.exceptions.EntityNotFound

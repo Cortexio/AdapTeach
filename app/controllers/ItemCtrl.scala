@@ -10,7 +10,7 @@ import play.api.libs.json.Json.toJson
 import graph.ItemRepo
 import models.Item
 import models.Formats._
-import core.common.App.execute
+import core.common.Core.execute
 import core.commands.CreateItem._
 import core.commands.FindItem._
 import core.exceptions.EntityNotFound

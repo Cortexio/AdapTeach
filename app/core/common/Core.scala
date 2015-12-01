@@ -5,7 +5,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 import core.common.Layer._
 
-object App {
+object Core {
 
 	def execute[C <: Command, O <: Outcome[C]](command: C)(implicit
 		validation: CommandFilter[Validation, C] = noop[Validation, C],
