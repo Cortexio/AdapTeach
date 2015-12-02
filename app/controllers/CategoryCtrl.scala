@@ -19,16 +19,8 @@ import controllers.json.CommandFormats._
 
 class CategoryCtrl extends Controller {
 
-	def create() = Endpoint.handle(parse.json) { request =>
-		execute(request.body.as[CreateCategory]) map {
-			outcome => Ok(toJson(outcome.createdCategory))
-		}
-	}
+	def create() = Endpoint.executeAs[CreateCategory, CreateCategoryOutcome]
 
-	def find(uuid: String) = Endpoint.handle { request =>
-		execute(FindCategory(uuid)) map {
-			outcome => Ok(toJson(outcome.foundCategory))
-		}
-	}
+	def find(uuid: String) = Endpoint.execute[FindCategory, FindCategoryOutcome](FindCategory(uuid))
 
 }

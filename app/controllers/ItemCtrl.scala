@@ -19,17 +19,8 @@ import controllers.json.CommandFormats._
 
 class ItemCtrl extends Controller {
 
-	def create() = Endpoint.handle(parse.json) { request =>
-		val command = request.body.as[CreateItem]
-		execute(command) map {
-			outcome => Ok(toJson(outcome.createdItem))
-		}
-	}
+	def create() = Endpoint.executeAs[CreateItem, CreateItemOutcome]
 
-	def find(uuid: String) = Endpoint.handle { request =>
-		execute(FindItem(uuid)) map {
-			outcome => Ok(toJson(outcome.foundItem))
-		}
-	}
+	def find(uuid: String) = Endpoint.execute[FindItem, FindItemOutcome](FindItem(uuid))
 	
 }

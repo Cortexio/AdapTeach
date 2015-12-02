@@ -8,7 +8,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import core.common._
 import models.Item
 import graph.ItemRepo
-import core.exceptions.EntityNotFound
+import core.exceptions._
 
 object CreateItem {
 
@@ -29,7 +29,7 @@ object CreateItem {
 	})
 
 	implicit val validation = Command.filter[Layer.Validation, CreateItem]( (command) => {
-		if (command.name.length < 2) throw new Exception("Validation Failed")
+		if (command.name.length < 2) throw new ValidationException("Validation Failed")
 		Future(command)
 	})
 
