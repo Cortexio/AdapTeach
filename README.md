@@ -141,19 +141,23 @@ In this case, `param_key` is a variable corresponding to the var you set in the 
 If you want to render a global error in a form, use the param_key `global` instead of `any_key`; which is a random choice just for the exemple in this case; and the error will automatically render just under the submit button.
 
 ### Core Application Architecture
-The server-side application is centered around a pure Scala, framework-agnostic core App object. The core App does only one thing : it executes Commands.
+The server-side application is centered around a pure Scala, framework-agnostic Core object. It does only one thing : Command execution
 ```scala
-App.execute(command)
+Core.execute(command)
 ```
 A Command represents a single action that can be performed on the system. Typically, on the REST API, every route is associated to a single Command :
 ```scala
 val command = request.body.as[CreateItem]
-App.execute(command)
+Core.execute(command)
+```
+Or more concisely :
+```scala
+def create() = Endpoint.executeAs[CreateItem, CreateItemOutcome]
 ```
 Executing a Command results in a Future[Outcome] :
 ```scala
 val command = request.body.as[CreateItem]
-App.execute(command) map {
+Core.execute(command) map {
 	outcome: CreateItemOutcome => Ok(toJson(outcome.createdItem))
 }
 ```
@@ -162,7 +166,7 @@ Creating a new type of Command and associated Outcome is very simple. Just inher
 case class CreateItem () extends Command
 case class CreateItemOutcome () extends Outcome[CreateItem]
 ```
-Now, if your try to execute this command, you'll get a compilation error. That's because the core App object expects you to provide an implicit CommandHandler. To create one, just use the helper function :
+Now, if your try to execute this command, you'll get a compilation error. That's because the Core object expects you to provide an implicit CommandHandler. To create one, just use the helper function :
 ```scala
 implicit val handler = Command.handler( (command: CreateItem) => {
 	// Create the Item...
