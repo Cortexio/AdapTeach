@@ -5,7 +5,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 import play.api.mvc._
 import play.api.mvc.BodyParsers.parse
-import play.api.libs.json.Json.toJson
+import play.api.libs.json.Json
 
 import controllers.common.Endpoint
 import core.common.Core.execute
@@ -15,11 +15,15 @@ import core.exceptions.EntityNotFound
 import graph.CategoryRepo
 import models.Category
 import models.Formats._
-import controllers.json.CommandFormats._
 
 class CategoryCtrl extends Controller {
 
+	implicit val createCategory = Json.reads[CreateCategory]
+	implicit val createCategoryOutcome = Json.writes[CreateCategoryOutcome]
+
 	def create() = Endpoint.executeAs[CreateCategory, CreateCategoryOutcome]
+
+	implicit val findCategoryOutcome = Json.writes[FindCategoryOutcome]
 
 	def find(uuid: String) = Endpoint.execute[FindCategory, FindCategoryOutcome](FindCategory(uuid))
 
