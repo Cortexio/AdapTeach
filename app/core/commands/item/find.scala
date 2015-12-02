@@ -18,7 +18,7 @@ object FindItem {
 		foundItem: Item
 	) extends Outcome[FindItem]
 
-	implicit val handler = Command.handler[FindItem, FindItemOutcome]( (command) => {
+	implicit val handler = Command.handler[FindItem, FindItemOutcome]( command => {
 		ItemRepo.find(command.uuid) map { maybeItem =>
 			maybeItem match {
 				case Some(foundItem) => FindItemOutcome(foundItem)

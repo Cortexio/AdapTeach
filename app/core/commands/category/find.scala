@@ -17,7 +17,7 @@ object FindCategory {
 		foundCategory: Category
 	) extends Outcome[FindCategory]
 
-	implicit val handler = Command.handler[FindCategory, FindCategoryOutcome]( (command) => {
+	implicit val handler = Command.handler[FindCategory, FindCategoryOutcome]( command => {
 		CategoryRepo.find(command.uuid) map { maybeCategory =>
 			maybeCategory match {
 				case Some(foundCategory) => FindCategoryOutcome(foundCategory)

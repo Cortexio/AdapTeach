@@ -26,7 +26,7 @@ object Endpoint {
 			Core.execute(command) map { outcome =>
 				Ok(toJson(outcome))
 			}
-	}
+		}
 
 	def execute[C <: Command, O <: Outcome[C]](command: C)(implicit
 		writes: Writes[O],
@@ -38,7 +38,7 @@ object Endpoint {
 			Core.execute(command) map { outcome =>
 				Ok(toJson(outcome))
 			}
-	}
+		}
 	
 	private def noop[L <: Layer, C <: Command] = new CommandFilter[L, C] {
 		def filter(command: C) = Future(command)
