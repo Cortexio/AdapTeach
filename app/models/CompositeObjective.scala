@@ -1,8 +1,10 @@
 package models
 
+import java.util.UUID
+
 case class CompositeObjective (
-  uuid: String,
+  uuid: UUID,
   name: String,
-  description: String,
+  description: Option[String],
   subObjectives: Seq[Objective]
 )

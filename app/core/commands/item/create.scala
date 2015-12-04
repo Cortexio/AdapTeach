@@ -14,7 +14,7 @@ object CreateItem {
 
 	case class CreateItem (
 		name: String,
-		description: String,
+		description: Option[String],
 		categoryId: String
 	) extends Command
 

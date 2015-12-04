@@ -1,5 +1,7 @@
 package controllers
 
+import java.util.UUID
+
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -25,6 +27,6 @@ class CategoryCtrl extends Controller {
 
 	implicit val findCategoryOutcome = Json.writes[FindCategoryOutcome]
 
-	def find(uuid: String) = Endpoint.execute[FindCategory, FindCategoryOutcome](FindCategory(uuid))
+	def find(uuid: String) = Endpoint.execute[FindCategory, FindCategoryOutcome](FindCategory(UUID.fromString(uuid)))
 
 }

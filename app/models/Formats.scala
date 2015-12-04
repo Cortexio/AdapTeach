@@ -10,4 +10,6 @@ object Formats {
 
 	implicit val itemFormat = Json.format[Item]
 
+	implicit val compositeObjectiveFormat = Json.format[CompositeObjective]
+
 }

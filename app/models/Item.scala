@@ -1,8 +1,10 @@
 package models
 
+import java.util.UUID
+
 case class Item (
-  uuid: String,
+  uuid: UUID,
   name: String,
-  description: String,
+  description: Option[String],
   category: Category
 )

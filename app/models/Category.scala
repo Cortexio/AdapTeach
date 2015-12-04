@@ -1,6 +1,8 @@
 package models
 
+import java.util.UUID
+
 case class Category (
-  uuid: String,
+  uuid: UUID,
   name: String
 )

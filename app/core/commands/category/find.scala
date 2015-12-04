@@ -1,5 +1,7 @@
 package core.commands
 
+import java.util.UUID
+
 import scala.concurrent.ExecutionContext.Implicits.global
 
 import core.common._
@@ -10,7 +12,7 @@ import graph.CategoryRepo
 object FindCategory {
 
 	case class FindCategory (
-		uuid: String
+		uuid: UUID
 	) extends Command
 
 	case class FindCategoryOutcome (

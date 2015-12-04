@@ -1,7 +1,9 @@
 package models
 
+import java.util.UUID
+
 case class Objective (
-	uuid: String,
+	uuid: UUID,
 	name: String,
-	description: String
+	description: Option[String]
 )

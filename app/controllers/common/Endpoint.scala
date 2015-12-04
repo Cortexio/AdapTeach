@@ -45,7 +45,9 @@ object Endpoint {
 	}
 
 	def json[E](block: E => Future[Result])(implicit reads: Reads[E]): Action[JsValue] = handle(parse.json) { request =>
-		block(request.body.as[E](reads))
+		val result = reads.reads(request.body)
+		if (result.isError) Future(BadRequest("Request body did not provide all the required data"))
+		else block(result.get)
 	}
 
   def handle(block: Request[AnyContent] => Future[Result]): Action[AnyContent] = handle(BodyParsers.parse.default)(block)

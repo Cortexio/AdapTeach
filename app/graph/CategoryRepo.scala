@@ -13,7 +13,7 @@ import models.Formats._
 
 object CategoryRepo {
 
-	def find(uuid: String): Future[Option[Category]] = {
+	def find(uuid: UUID): Future[Option[Category]] = {
 		val statement = "MATCH (c:Category {uuid: {uuid}}) RETURN c"
 		val parameters = Json.obj("uuid" -> uuid)
 		Cypher.send(statement, parameters) map { result =>

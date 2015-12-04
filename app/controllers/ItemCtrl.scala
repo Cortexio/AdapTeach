@@ -1,20 +1,14 @@
 package controllers
 
-import scala.concurrent._
-import scala.concurrent.ExecutionContext.Implicits.global
+import java.util.UUID
 
 import play.api.mvc._
-import play.api.mvc.BodyParsers.parse
 import play.api.libs.json.Json
 
 import controllers.common.Endpoint
-import graph.ItemRepo
-import models.Item
-import models.Formats._
-import core.common.Core.execute
 import core.commands.CreateItem._
 import core.commands.FindItem._
-import core.exceptions.EntityNotFound
+import models.Formats._
 
 class ItemCtrl extends Controller {
 
@@ -25,6 +19,6 @@ class ItemCtrl extends Controller {
 
 	implicit val findItemOutcome = Json.writes[FindItemOutcome]
 
-	def find(uuid: String) = Endpoint.execute[FindItem, FindItemOutcome](FindItem(uuid))
+	def find(uuid: String) = Endpoint.execute[FindItem, FindItemOutcome](FindItem(UUID.fromString(uuid)))
 	
 }
